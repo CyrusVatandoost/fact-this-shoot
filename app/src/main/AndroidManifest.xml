@@ -33,6 +33,7 @@
             </intent-filter>
         </activity>
         <activity   android:name=".Game"
+                    android:label="Game"
                     android:parentActivityName=".ChooseCategory">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
