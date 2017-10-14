@@ -52,36 +52,55 @@ public class Game extends AppCompatActivity {
         buttonC.setText(optionC);
         buttonD.setText(optionD);
 
-        // When user clicks on the correct button
         buttonA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonA.setBackgroundColor(Color.RED);
+                if(item.answer(buttonA.getText().toString())) {
+                    buttonA.setBackgroundColor(Color.GREEN);
+                    finish();
+                }
+                else {
+                    buttonA.setBackgroundColor(Color.RED);
+                }
             }
         });
 
-        // When user clicks on the correct button
         buttonB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonB.setBackgroundColor(Color.RED);
+                if(item.answer(buttonB.getText().toString())) {
+                    buttonB.setBackgroundColor(Color.GREEN);
+                    finish();
+                }
+                else {
+                    buttonB.setBackgroundColor(Color.RED);
+                }
             }
         });
 
-        // When user clicks on the correct button
         buttonC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonC.setBackgroundColor(Color.RED);
+                if(item.answer(buttonC.getText().toString())) {
+                    buttonC.setBackgroundColor(Color.GREEN);
+                    finish();
+                }
+                else {
+                    buttonC.setBackgroundColor(Color.RED);
+                }
             }
         });
 
-        // When user clicks on the correct button
         buttonD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonD.setBackgroundColor(Color.GREEN);
-                finish();
+                if(item.answer(buttonD.getText().toString())) {
+                    buttonD.setBackgroundColor(Color.GREEN);
+                    finish();
+                }
+                else {
+                    buttonD.setBackgroundColor(Color.RED);
+                }
             }
         });
 
