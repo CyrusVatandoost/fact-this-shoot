@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import classes.Database.DatabaseHelper;
+import classes.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
