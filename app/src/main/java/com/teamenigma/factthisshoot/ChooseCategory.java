@@ -19,6 +19,10 @@ import classes.Category;
 import classes.Database.DatabaseHelper;
 import classes.Item;
 
+/**
+ * Created by Cyrus on 12/10/2017.
+ */
+
 public class ChooseCategory extends AppCompatActivity {
 
     Button buttonCategory1;

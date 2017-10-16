@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
+        Settings Activity
+         */
+        /*
         buttonSettings = (Button)findViewById(R.id.buttonSettings);
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        */
 
 
 

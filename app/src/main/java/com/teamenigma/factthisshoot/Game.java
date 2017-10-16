@@ -13,6 +13,10 @@ import android.widget.TextView;
 import classes.Item;
 import classes.Category;
 
+/**
+ * Created by Cyrus on 12/10/2017.
+ */
+
 public class Game extends AppCompatActivity {
 
     Category category;
