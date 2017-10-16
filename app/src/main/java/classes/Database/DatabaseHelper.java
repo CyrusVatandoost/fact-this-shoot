@@ -171,13 +171,13 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
         while(!isValidID)
         {
             randomPos = r.nextInt(allItems.getCount()) + 1;//Select a random value between 1 and the total number of items in the data
-            if(isValidID(randomPos, invalidAnswerIDs)) isValidID = true;//Checks whether the random ID has not been selected before.
+            if(isValidID(randomPos, invalidAnswerIDs)) isValidID = true;//Checks whether the random position has not been selected before.
         }
 
-        allItems.moveToPosition(randomPos-1);//Go to the tuple where the random ID is
+        allItems.moveToPosition(randomPos-1);//Go to the tuple where the random position is
 
 
-        return allItems.getInt(0);//Return the ID
+        return allItems.getInt(0);//Return the ID in the tuple
 
 
     }
