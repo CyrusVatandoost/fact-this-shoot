@@ -3,7 +3,7 @@ package classes;
 import java.io.Serializable;
 
 /**
- * Created by user on 5 Oct 2017.
+ * Created by Cyrus on 5 Oct 2017.
  */
 
 @SuppressWarnings("serial") //With this annotation we are going to hide compiler warnings
