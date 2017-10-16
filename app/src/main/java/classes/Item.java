@@ -1,5 +1,7 @@
 package classes;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 /**
@@ -9,11 +11,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial") //With this annotation we are going to hide compiler warnings
 public class Item implements Serializable {
 
-    String question;
+    Bitmap question;
     String answer;
     String option1, option2, option3;
 
-    public Item(String question, String answer, String option1, String option2, String option3) {
+    public Item(Bitmap question, String answer, String option1, String option2, String option3) {
         this.question = question;
         this.answer = answer;
         this.option1 = option1;
@@ -27,7 +29,7 @@ public class Item implements Serializable {
         return false;
     }
 
-    public String getQuestion() {
+    public Bitmap getQuestion() {
         return question;
     }
 

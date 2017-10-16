@@ -20,11 +20,10 @@
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent">
 
-        <TextView
-            android:id="@+id/textQuestion"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/imageQuestion"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Question?"
             android:textAlignment="center"
             android:textSize="24sp" />
 

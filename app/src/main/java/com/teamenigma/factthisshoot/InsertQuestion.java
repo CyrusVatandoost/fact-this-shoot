@@ -1,5 +1,6 @@
 package com.teamenigma.factthisshoot;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
