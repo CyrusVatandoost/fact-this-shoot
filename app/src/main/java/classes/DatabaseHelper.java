@@ -4,13 +4,25 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.teamenigma.factthisshoot.R;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import classes.BitmapBytesConverter;
 
 /**
  * Created by Rgee on 12/10/2017.
  */
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
 
     private static final String DATABASE_NAME = "Facts.db";
     private static final String TABLE_NAME = "facts";
@@ -18,18 +30,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String col_NAME = "NAME";
     private static final String col_IMAGE = "IMAGE";
     private static final String col_CATEGORY = "CATEGORY";
-
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-                                            " ("+ col_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
-                                                + col_NAME + " TEXT, "
-                                                + col_IMAGE + " TEXT, "
-                                                + col_CATEGORY + " TEXT)";
-
+            "("+ col_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + col_NAME + " TEXT, "
+            + col_IMAGE + " BLOB, "
+            + col_CATEGORY + " TEXT)";
     public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     public static final String SELECT_ALL = "SELECT * FROM " + TABLE_NAME;
 
     /**
-     * Create a helper object to create, open, an d/or manage a database.
+     * Create a helper object to create, open, and/or manage a database.
      * This method always returns very quickly.  The database is not actually
      * created or opened until one of {@link #getWritableDatabase} or
      * {@link #getReadableDatabase} is called.
@@ -43,6 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
+        onCreate(this.getWritableDatabase());
+
     }
 
     /**
@@ -53,6 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(DELETE_TABLE);
         db.execSQL(CREATE_TABLE);
     }
 
@@ -85,21 +98,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
     Inserts the data of the picture into the database
     @param name The name of the picture (Earth, Cannabis etc.)
-    @param imagePath The filename of the picture
+    @param image The image file
     @param category The category the picture is in
      */
-    public boolean insertData(String name, String imagePath, String category) {
+    public boolean insertData(String name, byte[] image, String category) throws SQLiteException {
         SQLiteDatabase db = getWritableDatabase(); //Get database to write data on
         ContentValues cv = new ContentValues(); //Initialize container cv where data values wil be put in
-
         cv.put(col_NAME, name);//Put name in the cv
-        cv.put(col_IMAGE, imagePath);//Put image path in the cv
+        cv.put(col_IMAGE, image);//Put image in the cv
         cv.put(col_CATEGORY, category);//Put the category in the cv
-
         long result = db.insert(TABLE_NAME, null, cv);//Insert the cv into the database. Retrieve result, determining success of insert
-
         if(result == -1) return false;//If result is -1, database insert is unsuccessful
-        else return true;//Else, the database insert is successful
+        else {
+            Log.d("SQL STATEMENT", "Insertion successful");
+            return true; //Else, the database insert is successful
+        }
 
     }
 
@@ -109,11 +122,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public Cursor getCategoryData(String category) {
         SQLiteDatabase db = getWritableDatabase();
-
         //Retrieve all data in a category (dogs, plants etc.)
-        Cursor categoryData = db.rawQuery(SELECT_ALL + " WHERE " + col_CATEGORY + "= '"+category+"'", null);
-
+        Cursor categoryData = db.rawQuery(SELECT_ALL + " WHERE " + col_CATEGORY + " = '"+category+"'", null);
         return categoryData;
 
+    }
+
+    /**
+    Function used by the ChooseCategory class.
+    Selects and returns a random, non-repeated wrong answer.
+
+    @param invalidAnswerIDs the IDs of the answers that cannot be selected and returned again.
+    @param categoryName the category of the data the wrong answer will be selected from
+    @return the ID of the wrong answer
+
+     */
+    public int getWrongAnswerID(List<Integer> invalidAnswerIDs, String categoryName) {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor allItems = getCategoryData(categoryName);//Get all of the data within the specified category
+        Random r = new Random();//Initialize random generator for selecting the ID of the wrong answer
+        boolean isValidID = false;//Boolean to check whether the ID that is randomly selected has not been selected before.
+        int randomPos = 0;//Initialize the position of the tuple of the randomly selected wrong answer
+
+        while(!isValidID) {
+            randomPos = r.nextInt(allItems.getCount()) + 1;//Select a random value between 1 and the total number of items in the data
+            if(isValidID(randomPos, invalidAnswerIDs)) isValidID = true;//Checks whether the random position has not been selected before.
+        }
+
+        allItems.moveToPosition(randomPos-1);//Go to the tuple where the random position is
+        return allItems.getInt(0);//Return the ID in the tuple
+    }
+
+    public String getName(int pos) {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor tuple = db.rawQuery(SELECT_ALL + " WHERE ID = " + pos, null);
+        tuple.moveToFirst();
+        return tuple.getString(1);
+
+    }
+
+    private boolean isValidID(int randomID, List<Integer>invalidAnswerIDs) {
+        for(int i = 0; i < invalidAnswerIDs.size(); i++) {
+            if(randomID == invalidAnswerIDs.get(i)) return false;
+        }
+        return true;
     }
 }

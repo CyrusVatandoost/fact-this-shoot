@@ -12,11 +12,18 @@ public class Category implements Serializable {
     private ArrayList<Item> items;
     private ArrayList<Item> answeredItems;
 
+    /**
+     * This function creates a new Category class with empty variables.
+     */
     public Category() {
         items = new ArrayList<>();
         answeredItems = new ArrayList<>();
     }
 
+    /**
+     * This function creates a Category class from an existing Item ArrayList.
+     * @param items
+     */
     public Category(ArrayList<Item> items) {
         this.items = items;
         answeredItems = new ArrayList<>();
@@ -32,7 +39,7 @@ public class Category implements Serializable {
         return false;
     }
 
-    /*
+    /**
     This function returns a "random" Item from the list
     and adds that to the answered list.
      */

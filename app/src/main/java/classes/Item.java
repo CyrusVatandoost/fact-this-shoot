@@ -8,14 +8,14 @@ import java.io.Serializable;
  * Created by Cyrus on 5 Oct 2017.
  */
 
-@SuppressWarnings("serial") //With this annotation we are going to hide compiler warnings
+//@SuppressWarnings("serial") //With this annotation we are going to hide compiler warnings
 public class Item implements Serializable {
 
-    Bitmap question;
+    String question;
     String answer;
     String option1, option2, option3;
 
-    public Item(Bitmap question, String answer, String option1, String option2, String option3) {
+    public Item(String question, String answer, String option1, String option2, String option3) {
         this.question = question;
         this.answer = answer;
         this.option1 = option1;
@@ -23,13 +23,14 @@ public class Item implements Serializable {
         this.option3 = option3;
     }
 
+
     public boolean answer(String answer) {
         if(this.answer == answer)
             return true;
         return false;
     }
 
-    public Bitmap getQuestion() {
+    public String getQuestion() {
         return question;
     }
 
