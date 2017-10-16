@@ -1,15 +1,17 @@
 package com.teamenigma.factthisshoot;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import classes.Category;
 import classes.Item;
+import classes.Category;
 
 /**
  * Created by Cyrus on 12/10/2017.
@@ -19,14 +21,14 @@ public class Game extends AppCompatActivity {
 
     Category category;
 
-    TextView textQuestion;
+    ImageView imageQuestion;
     Button buttonA;
     Button buttonB;
     Button buttonC;
     Button buttonD;
 
     Item item;
-    String question;
+    Bitmap question;
     String answer;
     String optionA;
     String optionB;
@@ -37,8 +39,10 @@ public class Game extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        
-        textQuestion = (TextView)findViewById(R.id.textQuestion);
+
+
+
+        imageQuestion = (ImageView) findViewById(R.id.imageQuestion) ;
         buttonA = (Button)findViewById(R.id.buttonA);
         buttonB = (Button)findViewById(R.id.buttonB);
         buttonC = (Button)findViewById(R.id.buttonC);
@@ -47,6 +51,12 @@ public class Game extends AppCompatActivity {
         Intent intent = getIntent();
         category = (Category)intent.getSerializableExtra("category");
         setQuestion();
+
+        imageQuestion.setImageBitmap(question);
+        buttonA.setText(optionA);
+        buttonB.setText(optionB);
+        buttonC.setText(optionC);
+        buttonD.setText(optionD);
 
         buttonA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +110,7 @@ public class Game extends AppCompatActivity {
             }
         });
 
+
     }
 
     public void setQuestion() {
@@ -120,7 +131,7 @@ public class Game extends AppCompatActivity {
         buttonC.setBackgroundResource(android.R.drawable.btn_default);
         buttonD.setBackgroundResource(android.R.drawable.btn_default);
 
-        textQuestion.setText(question);
+        imageQuestion.setImageBitmap(question);
         buttonA.setText(optionA);
         buttonB.setText(optionB);
         buttonC.setText(optionC);
