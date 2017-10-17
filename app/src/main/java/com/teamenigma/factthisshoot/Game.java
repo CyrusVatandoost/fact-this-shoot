@@ -2,11 +2,14 @@ package com.teamenigma.factthisshoot;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,8 +33,9 @@ public class Game extends AppCompatActivity {
 
     ImageView imageQuestion;
     Button buttonA, buttonB, buttonC, buttonD;
-    TextView scoreTextView;
+    TextView scoreTextView, timerTextView;
     int score = 0;
+    int timer = 30;
 
     Item item;
     Bitmap questionBitmap;
@@ -49,6 +53,7 @@ public class Game extends AppCompatActivity {
         buttonC = (Button)findViewById(R.id.buttonC);
         buttonD = (Button)findViewById(R.id.buttonD);
         scoreTextView = (TextView)findViewById(R.id.scoreTextView);
+        timerTextView = (TextView)findViewById(R.id.timerTextView);
 
         Intent intent = getIntent();
         category = (Category)intent.getSerializableExtra("category");
@@ -58,11 +63,12 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(item.answer(buttonA.getText().toString())) {
-                    buttonA.setBackgroundColor(Color.GREEN);
+                    buttonA.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
                     correct();
                 }
                 else {
-                    buttonA.setBackgroundColor(Color.RED);
+                    buttonA.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    incorrect();
                 }
             }
         });
@@ -71,11 +77,12 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(item.answer(buttonB.getText().toString())) {
-                    buttonB.setBackgroundColor(Color.GREEN);
+                    buttonB.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
                     correct();
                 }
                 else {
-                    buttonB.setBackgroundColor(Color.RED);
+                    buttonB.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    incorrect();
                 }
             }
         });
@@ -84,11 +91,12 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(item.answer(buttonC.getText().toString())) {
-                    buttonC.setBackgroundColor(Color.GREEN);
+                    buttonC.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
                     correct();
                 }
                 else {
-                    buttonC.setBackgroundColor(Color.RED);
+                    buttonC.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    incorrect();
                 }
             }
         });
@@ -97,19 +105,24 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(item.answer(buttonD.getText().toString())) {
-                    buttonD.setBackgroundColor(Color.GREEN);
+                    buttonD.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
                     correct();
                 }
                 else {
-                    buttonD.setBackgroundColor(Color.RED);
+                    buttonD.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    incorrect();
                 }
             }
         });
 
+        startTimer();
 
     }
 
-    public void setQuestion() {
+    /**
+     * This function sets the variables for the new question.
+     */
+    private void setQuestion() {
 
         // If the Category still has Items, get one Item else end Game.
         if(category.canGet())
@@ -133,6 +146,11 @@ public class Game extends AppCompatActivity {
         buttonC.setBackgroundResource(android.R.drawable.btn_default);
         buttonD.setBackgroundResource(android.R.drawable.btn_default);
 
+        buttonA.getBackground().clearColorFilter();
+        buttonB.getBackground().clearColorFilter();
+        buttonC.getBackground().clearColorFilter();
+        buttonD.getBackground().clearColorFilter();
+
         imageQuestion.setImageBitmap(questionBitmap);
         buttonA.setText(optionList.get(0));
         buttonB.setText(optionList.get(1));
@@ -140,15 +158,56 @@ public class Game extends AppCompatActivity {
         buttonD.setText(optionList.get(3));
 
         scoreTextView.setText(score + "");
+        timerTextView.setText(timer + "");
+
     }
 
-    public void correct() {
+    /**
+     * This function gets called every time the user clicks on a correct answer.
+     */
+    private void correct() {
         score++;    // increments score
         setQuestion();
+        timer += 5;
+        checkGame();
     }
 
-    public void incorrect() {
+    /**
+     * This function gets called every time the user clicks on an incorrect answer.
+     */
+    private void incorrect() {
+        score--;
+        timer--;
+        scoreTextView.setText(score + "");
+        checkGame();
+    }
 
+    /**
+     * This function starts the timer which updates the timer every second.
+     */
+    private void startTimer() {
+        final Handler handler = new Handler();
+        final int delay = 1000; //milliseconds
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                timer--;
+                updateTimer();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
+    private void updateTimer() {
+        timerTextView.setText(timer + "");
+        checkGame();
+    }
+
+    private void checkGame() {
+        if(timer == 0)
+            finish();
+        if(score < 0)
+            finish();
     }
 
     /**
@@ -156,7 +215,7 @@ public class Game extends AppCompatActivity {
      * @param name
      * @return
      */
-    public Bitmap getBitmap(String name) {
+    private Bitmap getBitmap(String name) {
         Resources resources = this.getResources();
         final int resourceId = resources.getIdentifier(name, "drawable", this.getPackageName());
         Bitmap icon = BitmapFactory.decodeResource(this.getResources(), resourceId);
