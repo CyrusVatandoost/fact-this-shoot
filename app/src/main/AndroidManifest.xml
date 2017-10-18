@@ -2,13 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.teamenigma.factthisshoot">
 
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"></uses-permission>
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -51,7 +47,15 @@
         <activity
             android:name=".InsertQuestion"
             android:label="@string/title_activity_insert_question"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GameOver"
+            android:label="Game Over!"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

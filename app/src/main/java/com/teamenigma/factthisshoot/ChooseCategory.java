@@ -70,10 +70,8 @@ public class ChooseCategory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_category);
-
         dbHelper = new DatabaseHelper(this);
         setupDatabase();
-
         buttonCategory1 = (Button)findViewById(R.id.buttonCategory1);
         buttonCategory1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +82,6 @@ public class ChooseCategory extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
     }
 
     private void setupDatabase() {

@@ -42,6 +42,8 @@ public class Game extends AppCompatActivity {
     String answer;
     ArrayList<String> optionList;
 
+    final Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,7 +191,6 @@ public class Game extends AppCompatActivity {
      * This function starts the timer which updates the timer every second.
      */
     private void startTimer() {
-        final Handler handler = new Handler();
         final int delay = 1000; //milliseconds
         handler.postDelayed(new Runnable(){
             public void run(){
@@ -208,12 +209,16 @@ public class Game extends AppCompatActivity {
 
     /**
      * This function checks if the Game has been lost or not.
+     * If game is over, go to class.GameOver while passing Integer.score
      */
     private void checkGame() {
-        if(timer == 0)
+        if(timer == 0 || score < 0) {
+            Intent intent = new Intent(Game.this, GameOver.class);
+            intent.putExtra("score", score);
+            handler.removeCallbacksAndMessages(null);
             finish();
-        if(score < 0)
-            finish();
+            startActivity(intent);
+        }
     }
 
 }

@@ -30,6 +30,10 @@ public class Category implements Serializable {
         answeredItems = new ArrayList<>();
     }
 
+    /**
+     * This function adds an Item to the Category
+     * @param item
+     */
     public void add(Item item) {
         items.add(item);
     }
@@ -50,6 +54,9 @@ public class Category implements Serializable {
         return temp;
     }
 
+    /**
+     * This function shuffles the Items in the Category.
+     */
     public void shuffleItems() {
         Collections.shuffle(items);
     }
