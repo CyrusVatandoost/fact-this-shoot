@@ -2,6 +2,7 @@ package classes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Cyrus on 15 Oct 2017.
@@ -47,6 +48,10 @@ public class Category implements Serializable {
         Item temp = items.remove(0);
         answeredItems.add(temp);
         return temp;
+    }
+
+    public void shuffleItems() {
+        Collections.shuffle(items);
     }
 
 }

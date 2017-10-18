@@ -35,7 +35,7 @@ public class Game extends AppCompatActivity {
     Button buttonA, buttonB, buttonC, buttonD;
     TextView scoreTextView, timerTextView;
     int score = 0;
-    int timer = 30;
+    int timer = 10; // The Game will start with 10 seconds left.
 
     Item item;
     Bitmap questionBitmap;
@@ -46,8 +46,6 @@ public class Game extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-
 
         imageQuestion = (ImageView) findViewById(R.id.imageQuestion) ;
         buttonA = (Button)findViewById(R.id.buttonA);
@@ -173,7 +171,7 @@ public class Game extends AppCompatActivity {
     private void correct() {
         score++;    // increments score
         setQuestion();
-        timer += 5;
+        timer += 2; // 2 seconds gets added to timer if correct.
         checkGame();
     }
 
@@ -208,23 +206,14 @@ public class Game extends AppCompatActivity {
         checkGame();
     }
 
+    /**
+     * This function checks if the Game has been lost or not.
+     */
     private void checkGame() {
         if(timer == 0)
             finish();
         if(score < 0)
             finish();
-    }
-
-    /**
-     * This function gets the Bitmap from /resources from the String name
-     * @param name
-     * @return
-     */
-    private Bitmap getBitmap(String name) {
-        Resources resources = this.getResources();
-        final int resourceId = resources.getIdentifier(name, "drawable", this.getPackageName());
-        Bitmap icon = BitmapFactory.decodeResource(this.getResources(), resourceId);
-        return icon;
     }
 
 }
