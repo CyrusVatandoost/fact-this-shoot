@@ -28,6 +28,62 @@ public class ChooseCategory extends AppCompatActivity {
     DatabaseHelper dbHelper;
     Category category;
 
+    public void createCategory(String categoryName) {
+
+        category = new Category();
+        Cursor data = dbHelper.getCategoryData(categoryName); // Get all of the data within the specified category
+
+        /*
+        Iterate through every tuple in the data.
+        For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
+        The other three choices that are wrong will be randomly selected.
+         */
+        while(data.moveToNext())
+        {
+
+            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getBlob(2) + " " + data.getString(3));//Print in console for debugging
+
+            byte[] picture = data.getBlob(2);//Retrieve the image of the answer as a byte array
+            String answer = data.getString(1);//Retrieve the correct answer
+            int answerID = data.getInt(0);//Retrieve the ID of the answer.
+
+            String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
+
+
+            /*
+            List of ALL of the answers' IDs. The purpose of this list is to avoid repetition of selecting the same answer.
+             */
+            List<Integer> answerIDs = new ArrayList<Integer>();
+
+            answerIDs.add(answerID);//Add the ID of the correct answer into the list.
+
+            /*
+            Retrieve the other three random wrong answers
+             */
+            for (int i = 0 ; i < 3; i++)
+            {
+                int wrongAnswerID = dbHelper.getWrongAnswerID(answerIDs, categoryName);//Retrieve the ID of the wrong answer
+                answerIDs.add(wrongAnswerID);//Add the ID of the wrong answer to the list of answers to avoid selecting it again
+                wrongAnswers[i] = dbHelper.getName(wrongAnswerID);//Add the name to the list of wrong answers
+            }
+
+            //Create new Item and add to the category.
+            category.add(new Item(picture, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2]));
+
+
+
+        }
+
+
+
+        /*
+        category.add(new Item("Is this working?", "Red", "House", "Dog", "Original"));
+        category.add(new Item("What is the question?", "Red", "Hollow", "Dog", "Original"));
+        category.add(new Item("What is the question again?", "Red", "Hollow", "Dog", "Original"));
+        */
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,59 +105,28 @@ public class ChooseCategory extends AppCompatActivity {
 
     }
 
-    public void createCategory(String categoryName) {
+    private void setupDatabase()
+    {
 
-        category = new Category();
-        Cursor data = dbHelper.getCategoryData(categoryName); // Get all of the data within the specified category
+        dbHelper.insertData("Beagle", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.beagle)),  "Dogs");
+        dbHelper.insertData("Bulldog", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.bulldog)),  "Dogs");
+        dbHelper.insertData("Chowchow", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.chowchow)),  "Dogs");
+        dbHelper.insertData("Daschund", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.daschund)),  "Dogs");
+        dbHelper.insertData("Doberman Pinscher", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.doberman_pinscher)),  "Dogs");
+        dbHelper.insertData("German Shepherd", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.german_shepherd)),  "Dogs");
+        dbHelper.insertData("Golden Retriever", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.golden_retriever)),  "Dogs");
+        dbHelper.insertData("Great Dane", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.great_dane)),  "Dogs");
+        dbHelper.insertData("Labrador", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.labrador)),  "Dogs");
+        dbHelper.insertData("Pomeranian", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.pomeranian)),  "Dogs");
+        dbHelper.insertData("Poodle", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.poodle)),  "Dogs");
+        dbHelper.insertData("Pug", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.pug)),  "Dogs");
+        dbHelper.insertData("Rottweiler", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.rottweiler)),  "Dogs");
+        dbHelper.insertData("Siberian Husky", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.siberian_husky)),  "Dogs");
 
-        /*
-        Iterate through every tuple in the data.
-        For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
-        The other three choices that are wrong will be randomly selected.
-         */
 
-        while(data.moveToNext()) {
 
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getBlob(2) + " " + data.getString(3)); //Print in console for debugging
-            Bitmap picture = BitmapBytesConverter.getImage(data.getBlob(2));//Retrieve the image of the answer as a bitmap which can be put in the ImageView
-            String answer = data.getString(1); //Retrieve the correct answer
-            int answerID = data.getInt(0); //Retrieve the ID of the answer.
-            String[] wrongAnswers = new String[3]; //The list of the answers that are wrong.
 
-            // List of ALL of the answers' IDs. The purpose of this list is to avoid repetition of selecting the same answer.
-            List<Integer> answerIDs = new ArrayList();
 
-            answerIDs.add(answerID);    //Add the ID of the correct answer into the list.
-
-            // Retrieve the other three random wrong answers
-            for (int i = 0 ; i < 3; i++) {
-                int wrongAnswerID = dbHelper.getWrongAnswerID(answerIDs, categoryName);//Retrieve the ID of the wrong answer
-                answerIDs.add(wrongAnswerID);//Add the ID of the wrong answer to the list of answers to avoid selecting it again
-                wrongAnswers[i] = dbHelper.getName(wrongAnswerID);//Add the name to the list of wrong answers
-            }
-
-            // Create new Item and add to the Category.
-            category.add(new Item(picture.toString(), answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2]));
-
-        }
 
     }
-
-    private void setupDatabase() {
-        dbHelper.insertData("Beagle",               BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.beagle)),            "Dogs");
-        dbHelper.insertData("Bulldog",              BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.bulldog)),           "Dogs");
-        dbHelper.insertData("Chowchow",             BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.chowchow)),          "Dogs");
-        dbHelper.insertData("Daschund",             BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.daschund)),          "Dogs");
-        dbHelper.insertData("Doberman Pinscher",    BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.doberman_pinscher)), "Dogs");
-        dbHelper.insertData("German Shepherd",      BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.german_shepherd)),   "Dogs");
-        dbHelper.insertData("Golden Retriever",     BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.golden_retriever)),  "Dogs");
-        dbHelper.insertData("Great Dane",           BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.great_dane)),        "Dogs");
-        dbHelper.insertData("Labrador",             BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.labrador)),          "Dogs");
-        dbHelper.insertData("Pomeranian",           BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.pomeranian)),        "Dogs");
-        dbHelper.insertData("Poodle",               BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.poodle)),            "Dogs");
-        dbHelper.insertData("Pug",                  BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.pug)),               "Dogs");
-        dbHelper.insertData("Rottweiler",           BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.rottweiler)),        "Dogs");
-        dbHelper.insertData("Siberian Husky",       BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.siberian_husky)),    "Dogs");
-    }
-
 }

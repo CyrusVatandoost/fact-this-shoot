@@ -47,6 +47,8 @@ public class Game extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+
+
         imageQuestion = (ImageView) findViewById(R.id.imageQuestion) ;
         buttonA = (Button)findViewById(R.id.buttonA);
         buttonB = (Button)findViewById(R.id.buttonB);
@@ -58,6 +60,9 @@ public class Game extends AppCompatActivity {
         Intent intent = getIntent();
         category = (Category)intent.getSerializableExtra("category");
         setQuestion();
+
+        imageQuestion.setImageBitmap(questionBitmap);
+
 
         buttonA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +135,7 @@ public class Game extends AppCompatActivity {
         else
             finish();
 
-        questionBitmap = getBitmap("beagle"); // the Bitmap gets assigned here
+        questionBitmap = item.getQuestion();
         answer = item.getAnswer();
 
         // clear existing list, add options, and shuffle
