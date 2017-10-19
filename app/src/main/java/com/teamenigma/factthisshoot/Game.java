@@ -33,9 +33,10 @@ public class Game extends AppCompatActivity {
 
     ImageView imageQuestion;
     Button buttonA, buttonB, buttonC, buttonD;
-    TextView scoreTextView, timerTextView;
+    TextView textViewScore, textViewTimer, textViewHealth;
     int score = 0;
     int timer = 10; // The Game will start with 10 seconds left.
+    int health = 3;
 
     Item item;
     Bitmap questionBitmap;
@@ -54,15 +55,15 @@ public class Game extends AppCompatActivity {
         buttonB = (Button)findViewById(R.id.buttonB);
         buttonC = (Button)findViewById(R.id.buttonC);
         buttonD = (Button)findViewById(R.id.buttonD);
-        scoreTextView = (TextView)findViewById(R.id.scoreTextView);
-        timerTextView = (TextView)findViewById(R.id.timerTextView);
+        textViewScore = (TextView)findViewById(R.id.textViewScore);
+        textViewTimer = (TextView)findViewById(R.id.textViewTimer);
+        textViewHealth = (TextView)findViewById(R.id.textViewHealth);
 
         Intent intent = getIntent();
         category = (Category)intent.getSerializableExtra("category");
         setQuestion();
 
         imageQuestion.setImageBitmap(questionBitmap);
-
 
         buttonA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,8 +163,8 @@ public class Game extends AppCompatActivity {
         buttonC.setText(optionList.get(2));
         buttonD.setText(optionList.get(3));
 
-        scoreTextView.setText(score + "");
-        timerTextView.setText(timer + "");
+        textViewScore.setText(score + "");
+        textViewTimer.setText(timer + "");
 
     }
 
@@ -183,7 +184,9 @@ public class Game extends AppCompatActivity {
     private void incorrect() {
         score--;
         timer--;
-        scoreTextView.setText(score + "");
+        health--;
+        textViewScore.setText(score + "");
+        textViewHealth.setText(health + "");
         checkGame();
     }
 
@@ -206,7 +209,7 @@ public class Game extends AppCompatActivity {
      * This function gets called every second.
      */
     private void updateTimer() {
-        timerTextView.setText(timer + "");
+        textViewTimer.setText(timer + "");
         checkGame();
     }
 
