@@ -135,7 +135,7 @@ public class Game extends AppCompatActivity {
         else
             endGame();
 
-        questionBitmap = item.getQuestion();
+        questionBitmap = BitmapFactory.decodeResource(getResources(), item.getQuestion());
         answer = item.getAnswer();
 
         // clear existing list, add options, and shuffle

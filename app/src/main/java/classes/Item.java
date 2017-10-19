@@ -11,11 +11,11 @@ import java.io.Serializable;
 //@SuppressWarnings("serial") //With this annotation we are going to hide compiler warnings
 public class Item implements Serializable {
 
-    byte[] question;
+    int question;
     String answer;
     String option1, option2, option3;
 
-    public Item(byte[] question, String answer, String option1, String option2, String option3) {
+    public Item(int question, String answer, String option1, String option2, String option3) {
         this.question = question;
         this.answer = answer;
         this.option1 = option1;
@@ -30,8 +30,8 @@ public class Item implements Serializable {
         return false;
     }
 
-    public Bitmap getQuestion() {
-        return BitmapBytesConverter.getImage(question);
+    public int getQuestion() {
+        return question;
     }
 
     public String getAnswer() {

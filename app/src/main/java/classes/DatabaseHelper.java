@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
             "("+ col_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
             + col_NAME + " TEXT, "
-            + col_IMAGE + " BLOB, "
+            + col_IMAGE + " INTEGER, "
             + col_CATEGORY + " TEXT)";
     public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     public static final String SELECT_ALL = "SELECT * FROM " + TABLE_NAME;
@@ -101,16 +101,20 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
     @param image The image file
     @param category The category the picture is in
      */
-    public boolean insertData(String name, byte[] image, String category) throws SQLiteException {
+    public boolean insertData(String name, int image, String category) throws SQLiteException {
         SQLiteDatabase db = getWritableDatabase(); //Get database to write data on
         ContentValues cv = new ContentValues(); //Initialize container cv where data values wil be put in
         cv.put(col_NAME, name);//Put name in the cv
         cv.put(col_IMAGE, image);//Put image in the cv
         cv.put(col_CATEGORY, category);//Put the category in the cv
         long result = db.insert(TABLE_NAME, null, cv);//Insert the cv into the database. Retrieve result, determining success of insert
+
+        close();
+
         if(result == -1) return false;//If result is -1, database insert is unsuccessful
         else {
             Log.d("SQL STATEMENT", "Insertion successful");
+
             return true; //Else, the database insert is successful
         }
 
@@ -150,6 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
         }
 
         allItems.moveToPosition(randomPos-1);//Go to the tuple where the random position is
+        close();
         return allItems.getInt(0);//Return the ID in the tuple
     }
 
@@ -157,6 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
         SQLiteDatabase db = getWritableDatabase();
         Cursor tuple = db.rawQuery(SELECT_ALL + " WHERE ID = " + pos, null);
         tuple.moveToFirst();
+        close();
         return tuple.getString(1);
 
     }

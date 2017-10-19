@@ -42,8 +42,8 @@ public class ChooseCategory extends AppCompatActivity {
         The other three choices that are wrong will be randomly selected.
          */
         while(data.moveToNext()) {
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getBlob(2) + " " + data.getString(3));//Print in console for debugging
-            byte[] picture = data.getBlob(2);//Retrieve the image of the answer as a byte array
+            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
+            int picture = data.getInt(2);//Retrieve the image of the answer as a byte array
             String answer = data.getString(1);//Retrieve the correct answer
             int answerID = data.getInt(0);//Retrieve the ID of the answer.
             String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
@@ -58,6 +58,7 @@ public class ChooseCategory extends AppCompatActivity {
             category.add(new Item(picture, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and add to the category.
         }
         category.shuffleItems();
+
     }
 
     public Category getCategory(String categoryName) {
@@ -69,8 +70,9 @@ public class ChooseCategory extends AppCompatActivity {
         The other three choices that are wrong will be randomly selected.
          */
         while(data.moveToNext()) {
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getBlob(2) + " " + data.getString(3));//Print in console for debugging
-            byte[] picture = data.getBlob(2);//Retrieve the image of the answer as a byte array
+            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
+            //byte[] picture = data.getBlob(2);//Retrieve the image of the answer as a byte array
+            int pictureID = data.getInt(2);
             String answer = data.getString(1);//Retrieve the correct answer
             int answerID = data.getInt(0);//Retrieve the ID of the answer.
             String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
@@ -82,7 +84,8 @@ public class ChooseCategory extends AppCompatActivity {
                 answerIDs.add(wrongAnswerID);//Add the ID of the wrong answer to the list of answers to avoid selecting it again
                 wrongAnswers[i] = dbHelper.getName(wrongAnswerID);//Add the name to the list of wrong answers
             }
-            temp.add(new Item(picture, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and add to the category.
+
+            temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and add to the category.
         }
         temp.shuffleItems();
         return temp;
@@ -103,8 +106,12 @@ public class ChooseCategory extends AppCompatActivity {
     private void createCategoryList() {
         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.linearLayoutCategory);
         ArrayList<Category> categoryList = new ArrayList<>();
+
         // Add the categories here.
         categoryList.add(getCategory("Dogs"));
+        categoryList.add(getCategory("Planets"));
+        categoryList.add(getCategory("Flowers"));
+
         for(final Category c : categoryList) {
             Button button = new Button(new ContextThemeWrapper(this, R.style.CategoryButton), null, 0);
             button.setText(c.getName());
@@ -121,19 +128,47 @@ public class ChooseCategory extends AppCompatActivity {
     }
 
     private void setupDatabase() {
-        dbHelper.insertData("Beagle", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.beagle)),  "Dogs");
-        dbHelper.insertData("Bulldog", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.bulldog)),  "Dogs");
-        dbHelper.insertData("Chowchow", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.chowchow)),  "Dogs");
-        dbHelper.insertData("Daschund", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.daschund)),  "Dogs");
-        dbHelper.insertData("Doberman Pinscher", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.doberman_pinscher)),  "Dogs");
-        dbHelper.insertData("German Shepherd", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.german_shepherd)),  "Dogs");
-        dbHelper.insertData("Golden Retriever", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.golden_retriever)),  "Dogs");
-        dbHelper.insertData("Great Dane", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.great_dane)),  "Dogs");
-        dbHelper.insertData("Labrador", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.labrador)),  "Dogs");
-        dbHelper.insertData("Pomeranian", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.pomeranian)),  "Dogs");
-        dbHelper.insertData("Poodle", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.poodle)),  "Dogs");
-        dbHelper.insertData("Pug", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.pug)),  "Dogs");
-        dbHelper.insertData("Rottweiler", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.rottweiler)),  "Dogs");
-        dbHelper.insertData("Siberian Husky", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.siberian_husky)),  "Dogs");
+
+
+
+        //Insert Dogs
+        dbHelper.insertData("Beagle", R.drawable.beagle,  "Dogs");
+        dbHelper.insertData("Bulldog", R.drawable.bulldog,  "Dogs");
+        dbHelper.insertData("Chowchow", R.drawable.chowchow,  "Dogs");
+        dbHelper.insertData("Daschund", R.drawable.daschund,  "Dogs");
+        dbHelper.insertData("Doberman Pinscher", R.drawable.doberman_pinscher,  "Dogs");
+        dbHelper.insertData("German Shepherd", R.drawable.german_shepherd,  "Dogs");
+        dbHelper.insertData("Golden Retriever", R.drawable.golden_retriever,  "Dogs");
+        dbHelper.insertData("Great Dane",R.drawable.great_dane,  "Dogs");
+        dbHelper.insertData("Labrador", R.drawable.labrador,  "Dogs");
+        dbHelper.insertData("Pomeranian",R.drawable.pomeranian,  "Dogs");
+        dbHelper.insertData("Poodle", R.drawable.poodle,  "Dogs");
+        dbHelper.insertData("Pug", R.drawable.pug,  "Dogs");
+        dbHelper.insertData("Rottweiler", R.drawable.rottweiler,  "Dogs");
+        dbHelper.insertData("Siberian Husky", R.drawable.siberian_husky,  "Dogs");
+
+        /*
+        //Insert Planets
+        dbHelper.insertData("Earth", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.earth)), "Planets");
+        dbHelper.insertData("Jupiter", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.jupiter)), "Planets");
+        dbHelper.insertData("Mars", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.mars)), "Planets");
+        dbHelper.insertData("Mercury", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.mercury)), "Planets");
+        dbHelper.insertData("Neptune", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.neptune)), "Planets");
+        dbHelper.insertData("Saturn", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.saturn)), "Planets");
+        dbHelper.insertData("Uranus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.uranus)), "Planets");
+        dbHelper.insertData("Venus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.venus)), "Planets");
+
+        //Insert Flowers
+        dbHelper.insertData("Cannabis", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.cannabis)), "Flowers");
+        dbHelper.insertData("Daffodil", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.daffodil)), "Flowers");
+        dbHelper.insertData("Hibiscus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.hibiscus)), "Flowers");
+        dbHelper.insertData("Hyacinth", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.hyacinth)), "Flowers");
+        dbHelper.insertData("Lavender", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lavender)), "Flowers");
+        dbHelper.insertData("Lilac", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lilac)), "Flowers");
+        dbHelper.insertData("Lily", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lily)), "Flowers");
+        dbHelper.insertData("Orchid", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.orchids)), "Flowers");
+        dbHelper.insertData("Rose", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.roses)), "Flowers");
+        dbHelper.insertData("Sunflower", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.sunflower)), "Flowers");
+        */
     }
 }
