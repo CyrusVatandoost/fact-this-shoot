@@ -165,6 +165,7 @@ public class Game extends AppCompatActivity {
 
         textViewScore.setText(score + "");
         textViewTimer.setText(timer + "");
+        textViewHealth.setText(health + "");
 
     }
 
@@ -218,11 +219,15 @@ public class Game extends AppCompatActivity {
      * If game is over, go to class.GameOver while passing Integer.score
      */
     private void checkGame() {
-        if(timer == 0 || score < 0) {
+        if(timer == 0 || health == 0) {
             endGame();
         }
     }
 
+    /**
+     * This function gets called when the game ends.
+     * It brings the user to the GameOver Activity.
+     */
     private void endGame() {
         Intent intent = new Intent(Game.this, GameOver.class);
         intent.putExtra("score", score);

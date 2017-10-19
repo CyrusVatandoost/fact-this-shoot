@@ -129,8 +129,6 @@ public class ChooseCategory extends AppCompatActivity {
 
     private void setupDatabase() {
 
-
-
         //Insert Dogs
         dbHelper.insertData("Beagle", R.drawable.beagle,  "Dogs");
         dbHelper.insertData("Bulldog", R.drawable.bulldog,  "Dogs");
@@ -147,28 +145,27 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Rottweiler", R.drawable.rottweiler,  "Dogs");
         dbHelper.insertData("Siberian Husky", R.drawable.siberian_husky,  "Dogs");
 
-        /*
         //Insert Planets
-        dbHelper.insertData("Earth", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.earth)), "Planets");
-        dbHelper.insertData("Jupiter", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.jupiter)), "Planets");
-        dbHelper.insertData("Mars", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.mars)), "Planets");
-        dbHelper.insertData("Mercury", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.mercury)), "Planets");
-        dbHelper.insertData("Neptune", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.neptune)), "Planets");
-        dbHelper.insertData("Saturn", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.saturn)), "Planets");
-        dbHelper.insertData("Uranus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.uranus)), "Planets");
-        dbHelper.insertData("Venus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.venus)), "Planets");
+        dbHelper.insertData("Earth",    R.drawable.earth, "Planets");
+        dbHelper.insertData("Jupiter",  R.drawable.jupiter, "Planets");
+        dbHelper.insertData("Mars",     R.drawable.mars, "Planets");
+        dbHelper.insertData("Mercury", R.drawable.mercury, "Planets");
+        dbHelper.insertData("Neptune", R.drawable.neptune, "Planets");
+        dbHelper.insertData("Saturn", R.drawable.saturn, "Planets");
+        dbHelper.insertData("Uranus", R.drawable.uranus, "Planets");
+        dbHelper.insertData("Venus", R.drawable.venus, "Planets");
 
         //Insert Flowers
-        dbHelper.insertData("Cannabis", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.cannabis)), "Flowers");
-        dbHelper.insertData("Daffodil", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.daffodil)), "Flowers");
-        dbHelper.insertData("Hibiscus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.hibiscus)), "Flowers");
-        dbHelper.insertData("Hyacinth", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.hyacinth)), "Flowers");
-        dbHelper.insertData("Lavender", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lavender)), "Flowers");
-        dbHelper.insertData("Lilac", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lilac)), "Flowers");
-        dbHelper.insertData("Lily", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lily)), "Flowers");
-        dbHelper.insertData("Orchid", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.orchids)), "Flowers");
-        dbHelper.insertData("Rose", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.roses)), "Flowers");
-        dbHelper.insertData("Sunflower", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.sunflower)), "Flowers");
-        */
+        dbHelper.insertData("Cannabis", R.drawable.cannabis, "Flowers");
+        dbHelper.insertData("Daffodil", R.drawable.daffodil, "Flowers");
+        dbHelper.insertData("Hibiscus", R.drawable.hibiscus, "Flowers");
+        dbHelper.insertData("Hyacinth", R.drawable.hyacinth, "Flowers");
+        dbHelper.insertData("Lavender", R.drawable.lavender, "Flowers");
+        dbHelper.insertData("Lilac", R.drawable.lilac, "Flowers");
+        dbHelper.insertData("Lily", R.drawable.lily, "Flowers");
+        dbHelper.insertData("Orchid", R.drawable.orchids, "Flowers");
+        dbHelper.insertData("Rose", R.drawable.roses, "Flowers");
+        dbHelper.insertData("Sunflower", R.drawable.sunflower, "Flowers");
+
     }
 }
