@@ -133,7 +133,7 @@ public class Game extends AppCompatActivity {
         if(category.canGet())
             item = category.getItem();
         else
-            finish();
+            endGame();
 
         questionBitmap = item.getQuestion();
         answer = item.getAnswer();
@@ -202,6 +202,9 @@ public class Game extends AppCompatActivity {
         }, delay);
     }
 
+    /**
+     * This function gets called every second.
+     */
     private void updateTimer() {
         timerTextView.setText(timer + "");
         checkGame();
@@ -213,12 +216,16 @@ public class Game extends AppCompatActivity {
      */
     private void checkGame() {
         if(timer == 0 || score < 0) {
-            Intent intent = new Intent(Game.this, GameOver.class);
-            intent.putExtra("score", score);
-            handler.removeCallbacksAndMessages(null);
-            finish();
-            startActivity(intent);
+            endGame();
         }
+    }
+
+    private void endGame() {
+        Intent intent = new Intent(Game.this, GameOver.class);
+        intent.putExtra("score", score);
+        handler.removeCallbacksAndMessages(null);
+        finish();
+        startActivity(intent);
     }
 
 }
