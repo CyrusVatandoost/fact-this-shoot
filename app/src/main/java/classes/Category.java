@@ -10,6 +10,7 @@ import java.util.Collections;
 
 public class Category implements Serializable {
 
+    private String name;
     private ArrayList<Item> items;
     private ArrayList<Item> answeredItems;
 
@@ -19,6 +20,15 @@ public class Category implements Serializable {
     public Category() {
         items = new ArrayList<>();
         answeredItems = new ArrayList<>();
+    }
+
+    /**
+     * This function creates a new Category class with empty variables.
+     */
+    public Category(String name) {
+        items = new ArrayList<>();
+        answeredItems = new ArrayList<>();
+        this.name = name;
     }
 
     /**
@@ -38,10 +48,25 @@ public class Category implements Serializable {
         items.add(item);
     }
 
+    /**
+     * This function shuffles the Items in the Category.
+     */
+    public void shuffleItems() {
+        Collections.shuffle(items);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public boolean canGet() {
         if(!items.isEmpty())
             return true;
         return false;
+    }
+
+    public String getName() {
+        return name;
     }
 
     /**
@@ -52,13 +77,6 @@ public class Category implements Serializable {
         Item temp = items.remove(0);
         answeredItems.add(temp);
         return temp;
-    }
-
-    /**
-     * This function shuffles the Items in the Category.
-     */
-    public void shuffleItems() {
-        Collections.shuffle(items);
     }
 
 }
