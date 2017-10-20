@@ -29,15 +29,14 @@ import classes.Category;
 
 public class Game extends AppCompatActivity {
 
-    Category category;
-
     ImageView imageQuestion, heart1, heart2, heart3;
     Button buttonA, buttonB, buttonC, buttonD;
     TextView textViewScore, textViewTimer;
     int score = 0;
-    int timer = 10; // The Game will start with 10 seconds left.
+    int timer = 5; // The Game will start with 10 seconds left.
     int health = 3;
 
+    Category category;
     Item item;
     Bitmap questionBitmap;
     String answer;
@@ -176,7 +175,7 @@ public class Game extends AppCompatActivity {
         score += 100;
         score += timer * 10;
         setQuestion();
-        timer = 10; // 3 seconds gets added to timer if correct.
+        timer = 6;
         checkGame();
     }
 
