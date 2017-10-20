@@ -33,32 +33,17 @@ public class ChooseCategory extends AppCompatActivity {
     DatabaseHelper dbHelper;
     Category category;
 
-    public void createCategory(String categoryName) {
-        category = new Category();
-        Cursor data = dbHelper.getCategoryData(categoryName); // Get all of the data within the specified category
-        /*
-        Iterate through every tuple in the data.
-        For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
-        The other three choices that are wrong will be randomly selected.
-         */
-        while(data.moveToNext()) {
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
-            int picture = data.getInt(2);//Retrieve the image of the answer as a byte array
-            String answer = data.getString(1);//Retrieve the correct answer
-            int answerID = data.getInt(0);//Retrieve the ID of the answer.
-            String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
-            List<Integer> answerIDs = new ArrayList(); // List of ALL of the answers' IDs. The purpose of this list is to avoid repetition of selecting the same answer.
-            answerIDs.add(answerID); //Add the ID of the correct answer into the list.
-            // Retrieve the other three random wrong answers
-            for (int i = 0 ; i < 3; i++) {
-                int wrongAnswerID = dbHelper.getWrongAnswerID(answerIDs, categoryName);//Retrieve the ID of the wrong answer
-                answerIDs.add(wrongAnswerID);//Add the ID of the wrong answer to the list of answers to avoid selecting it again
-                wrongAnswers[i] = dbHelper.getName(wrongAnswerID);//Add the name to the list of wrong answers
-            }
-            category.add(new Item(picture, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and add to the category.
-        }
-        category.shuffleItems();
 
+
+
+    private void displayCategory(String categoryName)
+    {
+        Cursor data = dbHelper.getCategoryData(categoryName);
+
+        while(data.moveToNext())
+        {
+            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getString(3));//Print in console for debugging
+        }
     }
 
     public Category getCategory(String categoryName) {
@@ -71,18 +56,21 @@ public class ChooseCategory extends AppCompatActivity {
          */
         while(data.moveToNext()) {
             Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
-            //byte[] picture = data.getBlob(2);//Retrieve the image of the answer as a byte array
-            int pictureID = data.getInt(2);
+
+            int pictureID = data.getInt(2); //Retrieve the image ID of the answer
             String answer = data.getString(1);//Retrieve the correct answer
-            int answerID = data.getInt(0);//Retrieve the ID of the answer.
+
             String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
-            List<Integer> answerIDs = new ArrayList(); // List of ALL of the answers' IDs. The purpose of this list is to avoid repetition of selecting the same answer.
-            answerIDs.add(answerID); //Add the ID of the correct answer into the list.
+
+            List<String> answers = new ArrayList<>(); // List of ALL of the answers. The purpose of this list is to avoid repetition of selecting the same answer.
+
+            answers.add(answer); //Add the correct answer into the list.
+
             // Retrieve the other three random wrong answers
             for (int i = 0 ; i < 3; i++) {
-                int wrongAnswerID = dbHelper.getWrongAnswerID(answerIDs, categoryName);//Retrieve the ID of the wrong answer
-                answerIDs.add(wrongAnswerID);//Add the ID of the wrong answer to the list of answers to avoid selecting it again
-                wrongAnswers[i] = dbHelper.getName(wrongAnswerID);//Add the name to the list of wrong answers
+                String wrongAnswer = dbHelper.getWrongAnswerID(answers, categoryName);//Retrieve the wrong answer
+                answers.add(wrongAnswer);//Add the wrong answer to the list of answers to avoid selecting it again
+                wrongAnswers[i] = wrongAnswer;//Add the name to the list of wrong answers
             }
 
             temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and add to the category.
@@ -113,6 +101,9 @@ public class ChooseCategory extends AppCompatActivity {
         categoryList.add(getCategory("Flowers"));
 
         for(final Category c : categoryList) {
+
+            displayCategory(c.getName());
+
             Button button = new Button(new ContextThemeWrapper(this, R.style.CategoryButton), null, 0);
             button.setText(c.getName());
             button.setOnClickListener(new View.OnClickListener() {
@@ -147,28 +138,28 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Rottweiler", R.drawable.rottweiler,  "Dogs");
         dbHelper.insertData("Siberian Husky", R.drawable.siberian_husky,  "Dogs");
 
-        /*
+
         //Insert Planets
-        dbHelper.insertData("Earth", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.earth)), "Planets");
-        dbHelper.insertData("Jupiter", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.jupiter)), "Planets");
-        dbHelper.insertData("Mars", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.mars)), "Planets");
-        dbHelper.insertData("Mercury", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.mercury)), "Planets");
-        dbHelper.insertData("Neptune", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.neptune)), "Planets");
-        dbHelper.insertData("Saturn", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.saturn)), "Planets");
-        dbHelper.insertData("Uranus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.uranus)), "Planets");
-        dbHelper.insertData("Venus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.venus)), "Planets");
+        dbHelper.insertData("Earth", R.drawable.earth, "Planets");
+        dbHelper.insertData("Jupiter", R.drawable.jupiter, "Planets");
+        dbHelper.insertData("Mars", R.drawable.mars, "Planets");
+        dbHelper.insertData("Mercury", R.drawable.mercury, "Planets");
+        dbHelper.insertData("Neptune", R.drawable.neptune, "Planets");
+        dbHelper.insertData("Saturn", R.drawable.saturn, "Planets");
+        dbHelper.insertData("Uranus", R.drawable.uranus, "Planets");
+        dbHelper.insertData("Venus", R.drawable.venus, "Planets");
 
         //Insert Flowers
-        dbHelper.insertData("Cannabis", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.cannabis)), "Flowers");
-        dbHelper.insertData("Daffodil", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.daffodil)), "Flowers");
-        dbHelper.insertData("Hibiscus", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.hibiscus)), "Flowers");
-        dbHelper.insertData("Hyacinth", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.hyacinth)), "Flowers");
-        dbHelper.insertData("Lavender", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lavender)), "Flowers");
-        dbHelper.insertData("Lilac", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lilac)), "Flowers");
-        dbHelper.insertData("Lily", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.lily)), "Flowers");
-        dbHelper.insertData("Orchid", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.orchids)), "Flowers");
-        dbHelper.insertData("Rose", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.roses)), "Flowers");
-        dbHelper.insertData("Sunflower", BitmapBytesConverter.getBytes(BitmapFactory.decodeResource(this.getResources(), R.drawable.sunflower)), "Flowers");
-        */
+        dbHelper.insertData("Cannabis", R.drawable.cannabis, "Flowers");
+        dbHelper.insertData("Daffodil", R.drawable.daffodil, "Flowers");
+        dbHelper.insertData("Hibiscus", R.drawable.hibiscus, "Flowers");
+        dbHelper.insertData("Hyacinth", R.drawable.hyacinth, "Flowers");
+        dbHelper.insertData("Lavender", R.drawable.lavender, "Flowers");
+        dbHelper.insertData("Lilac", R.drawable.lilac, "Flowers");
+        dbHelper.insertData("Lily", R.drawable.lily, "Flowers");
+        dbHelper.insertData("Orchid", R.drawable.orchids, "Flowers");
+        dbHelper.insertData("Rose", R.drawable.roses, "Flowers");
+        dbHelper.insertData("Sunflower", R.drawable.sunflower, "Flowers");
+
     }
 }
