@@ -136,41 +136,41 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
     Function used by the ChooseCategory class.
     Selects and returns a random, non-repeated wrong answer.
 
-    @param invalidAnswerIDs the IDs of the answers that cannot be selected and returned again.
+    @param invalidAnswers the answers that cannot be selected and returned again.
     @param categoryName the category of the data the wrong answer will be selected from
-    @return the ID of the wrong answer
+    @return the randomly selected wrong answer
 
      */
-    public int getWrongAnswerID(List<Integer> invalidAnswerIDs, String categoryName) {
+    public String getWrongAnswerID(List<String> invalidAnswers, String categoryName) {
+
         SQLiteDatabase db = getWritableDatabase();
+
         Cursor allItems = getCategoryData(categoryName);//Get all of the data within the specified category
-        Random r = new Random();//Initialize random generator for selecting the ID of the wrong answer
-        boolean isValidID = false;//Boolean to check whether the ID that is randomly selected has not been selected before.
-        int randomPos = 0;//Initialize the position of the tuple of the randomly selected wrong answer
 
-        while(!isValidID) {
-            randomPos = r.nextInt(allItems.getCount()) + 1;//Select a random value between 1 and the total number of items in the data
-            if(isValidID(randomPos, invalidAnswerIDs)) isValidID = true;//Checks whether the random position has not been selected before.
+        Random r = new Random();//Initialize random generator for selecting the wrong answer
+
+
+        ArrayList<String>allItemNames = new ArrayList<String>(); //List of all answers
+
+        //Transfer the names in the cursor queried to the list of all answers
+        while(allItems.moveToNext())
+        {
+            allItemNames.add(allItems.getString(1));
         }
 
-        allItems.moveToPosition(randomPos-1);//Go to the tuple where the random position is
-        close();
-        return allItems.getInt(0);//Return the ID in the tuple
-    }
-
-    public String getName(int pos) {
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor tuple = db.rawQuery(SELECT_ALL + " WHERE ID = " + pos, null);
-        tuple.moveToFirst();
-        close();
-        return tuple.getString(1);
-
-    }
-
-    private boolean isValidID(int randomID, List<Integer>invalidAnswerIDs) {
-        for(int i = 0; i < invalidAnswerIDs.size(); i++) {
-            if(randomID == invalidAnswerIDs.get(i)) return false;
+        //Remove the invalid answers from the list of all answers
+        for(String name : invalidAnswers)
+        {
+            allItemNames.remove(name);
         }
-        return true;
+
+
+        int randomPos = r.nextInt(allItemNames.size()); //Generate random position in the list of all answers
+
+
+        close();
+
+        return allItemNames.get(randomPos); //Return the answer at the random position
     }
+
 }
