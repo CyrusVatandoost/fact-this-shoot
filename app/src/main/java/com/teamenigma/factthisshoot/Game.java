@@ -31,9 +31,9 @@ public class Game extends AppCompatActivity {
 
     Category category;
 
-    ImageView imageQuestion;
+    ImageView imageQuestion, heart1, heart2, heart3;
     Button buttonA, buttonB, buttonC, buttonD;
-    TextView textViewScore, textViewTimer, textViewHealth;
+    TextView textViewScore, textViewTimer;
     int score = 0;
     int timer = 10; // The Game will start with 10 seconds left.
     int health = 3;
@@ -51,14 +51,15 @@ public class Game extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         imageQuestion = (ImageView) findViewById(R.id.imageQuestion) ;
+        heart1 = (ImageView) findViewById(R.id.heart1) ;
+        heart2 = (ImageView) findViewById(R.id.heart2) ;
+        heart3 = (ImageView) findViewById(R.id.heart3) ;
         buttonA = (Button)findViewById(R.id.buttonA);
         buttonB = (Button)findViewById(R.id.buttonB);
         buttonC = (Button)findViewById(R.id.buttonC);
         buttonD = (Button)findViewById(R.id.buttonD);
         textViewScore = (TextView)findViewById(R.id.textViewScore);
         textViewTimer = (TextView)findViewById(R.id.textViewTimer);
-        textViewHealth = (TextView)findViewById(R.id.textViewHealth);
-
         Intent intent = getIntent();
         category = (Category)intent.getSerializableExtra("category");
         setQuestion();
@@ -165,7 +166,6 @@ public class Game extends AppCompatActivity {
 
         textViewScore.setText(score + "");
         textViewTimer.setText(timer + "");
-        textViewHealth.setText(health + "");
 
     }
 
@@ -173,9 +173,10 @@ public class Game extends AppCompatActivity {
      * This function gets called every time the user clicks on a correct answer.
      */
     private void correct() {
-        score++;    // increments score
+        score += 100;
+        score += timer * 10;
         setQuestion();
-        timer += 2; // 2 seconds gets added to timer if correct.
+        timer = 10; // 3 seconds gets added to timer if correct.
         checkGame();
     }
 
@@ -183,12 +184,36 @@ public class Game extends AppCompatActivity {
      * This function gets called every time the user clicks on an incorrect answer.
      */
     private void incorrect() {
-        score--;
-        timer--;
+        score -= 300;
         health--;
         textViewScore.setText(score + "");
-        textViewHealth.setText(health + "");
+        updateHealth();
         checkGame();
+    }
+
+    private void updateHealth() {
+        switch(health){
+            case 0:
+                heart1.setVisibility(View.INVISIBLE);
+                heart2.setVisibility(View.INVISIBLE);
+                heart3.setVisibility(View.INVISIBLE);
+                break;
+            case 1:
+                heart1.setVisibility(View.VISIBLE);
+                heart2.setVisibility(View.INVISIBLE);
+                heart3.setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                heart1.setVisibility(View.VISIBLE);
+                heart2.setVisibility(View.VISIBLE);
+                heart3.setVisibility(View.INVISIBLE);
+                break;
+            case 3:
+                heart1.setVisibility(View.VISIBLE);
+                heart2.setVisibility(View.VISIBLE);
+                heart3.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     /**

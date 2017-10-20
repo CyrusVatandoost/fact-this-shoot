@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "556605380910",
+    "firebase_url": "https://factthisshoot.firebaseio.com",
+    "project_id": "factthisshoot",
+    "storage_bucket": "factthisshoot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556605380910:android:2a88c8ed1cdb4fb8",
+        "android_client_info": {
+          "package_name": "com.teamenigma.factthisshoot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556605380910-mtua40v3alhparcpn73lluj80h51rjn0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDptGR-cOcOPwSFMtRlbNnlggJ1xAZGR_E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
