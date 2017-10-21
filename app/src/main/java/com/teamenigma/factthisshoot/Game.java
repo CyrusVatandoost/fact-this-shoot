@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,18 +30,18 @@ import classes.Category;
 
 public class Game extends AppCompatActivity {
 
-    ImageView imageQuestion, heart1, heart2, heart3, imageCheck, imageCross;
-    Button buttonA, buttonB, buttonC, buttonD;
-    TextView textViewScore, textViewTimer;
-    int score = 0;
-    int timer = 5; // The Game will start with 10 seconds left.
-    int health = 3;
+    private ImageView imageQuestion, heart1, heart2, heart3, imageCheck, imageCross;
+    private Button buttonA, buttonB, buttonC, buttonD;
+    private TextView textViewScore, textViewTimer;
+    private int score = 0;
+    private int timer = 5; // The Game will start with 10 seconds left.
+    private int health = 3;
 
-    Category category;
-    Item item;
-    Bitmap questionBitmap;
-    String answer;
-    ArrayList<String> optionList;
+    private Category category;
+    private Item item;
+    private Bitmap questionBitmap;
+    private String answer;
+    private ArrayList<String> optionList;
 
     final Handler handler = new Handler();
 
@@ -81,6 +82,7 @@ public class Game extends AppCompatActivity {
                 }
                 else {
                     buttonA.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    buttonA.setEnabled(false);
                     incorrect();
                 }
             }
@@ -95,6 +97,7 @@ public class Game extends AppCompatActivity {
                 }
                 else {
                     buttonB.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    buttonB.setEnabled(false);
                     incorrect();
                 }
             }
@@ -109,6 +112,7 @@ public class Game extends AppCompatActivity {
                 }
                 else {
                     buttonC.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    buttonC.setEnabled(false);
                     incorrect();
                 }
             }
@@ -123,12 +127,18 @@ public class Game extends AppCompatActivity {
                 }
                 else {
                     buttonD.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    buttonD.setEnabled(false);
                     incorrect();
                 }
             }
         });
 
         startTimer();
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 
@@ -169,6 +179,12 @@ public class Game extends AppCompatActivity {
         buttonB.setText(optionList.get(1));
         buttonC.setText(optionList.get(2));
         buttonD.setText(optionList.get(3));
+
+        // Re-enables all buttons that were disabled when they were incorrectly clicked on.
+        buttonA.setEnabled(true);
+        buttonB.setEnabled(true);
+        buttonC.setEnabled(true);
+        buttonD.setEnabled(true);
 
         textViewScore.setText(score + "");
         textViewTimer.setText(timer + "");
