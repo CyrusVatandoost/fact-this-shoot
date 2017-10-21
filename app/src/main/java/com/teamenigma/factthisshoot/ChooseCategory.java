@@ -31,17 +31,11 @@ import classes.Item;
 public class ChooseCategory extends AppCompatActivity {
 
     DatabaseHelper dbHelper;
-    Category category;
 
-
-
-
-    private void displayCategory(String categoryName)
-    {
+    private void displayCategory(String categoryName){
         Cursor data = dbHelper.getCategoryData(categoryName);
 
-        while(data.moveToNext())
-        {
+        while(data.moveToNext()) {
             Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getString(3));//Print in console for debugging
         }
     }

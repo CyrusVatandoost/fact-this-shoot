@@ -9,6 +9,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,6 +48,11 @@ public class Game extends AppCompatActivity {
 
     final Handler handler = new Handler();
 
+    private SoundPool soundPool;
+    private int soundCorrect, soundIncorrect;
+    private boolean soundLoaded = false;
+    private float actualVolume, maxVolume, volume;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +78,7 @@ public class Game extends AppCompatActivity {
         Intent intent = getIntent();
         category = (Category)intent.getSerializableExtra("category");
         setQuestion();
+        loadSounds();
 
         imageQuestion.setImageBitmap(questionBitmap);
 
@@ -142,6 +151,23 @@ public class Game extends AppCompatActivity {
 
     }
 
+    public void loadSounds() {
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                soundLoaded = true;
+            }
+        });
+        soundCorrect = soundPool.load(this, R.raw.correct1, 1);
+        soundIncorrect = soundPool.load(this, R.raw.incorrect1, 1);
+
+        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        actualVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        volume = actualVolume / maxVolume;
+    }
+
     /**
      * This function sets the variables for the new question.
      */
@@ -201,6 +227,10 @@ public class Game extends AppCompatActivity {
         timer = 6;
         checkGame();
 
+        if (soundLoaded) {
+            soundPool.play(soundCorrect, volume, volume, 1, 0, 1f);
+        }
+
         // Display the check mark for 250 milliseconds.
         imageCheck.setVisibility(View.VISIBLE);
         Handler handler = new Handler();
@@ -220,6 +250,9 @@ public class Game extends AppCompatActivity {
         textViewScore.setText(score + "");
         updateHealth();
         checkGame();
+        if (soundLoaded) {
+            soundPool.play(soundIncorrect, volume, volume, 1, 0, 1f);
+        }
 
         // Display the cross mark for 250 milliseconds.
         imageCross.setVisibility(View.VISIBLE);
@@ -296,7 +329,7 @@ public class Game extends AppCompatActivity {
     private void endGame() {
         Intent intent = new Intent(Game.this, GameOver.class);
         intent.putExtra("score", score);
-        handler.removeCallbacksAndMessages(null);
+        handler.removeCallbacksAndMessages(null);   // This stops the Handler timer from going off in the next activity.
         finish();
         startActivity(intent);
     }
