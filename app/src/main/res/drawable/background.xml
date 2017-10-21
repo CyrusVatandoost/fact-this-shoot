@@ -3,7 +3,7 @@
     <item android:drawable="@color/colorPrimary" />
     <item>
         <bitmap
-            android:src="@drawable/crownheads_logo_circle"
+            android:src="@drawable/logos"
             android:gravity="center"/>
     </item>
 </layer-list>

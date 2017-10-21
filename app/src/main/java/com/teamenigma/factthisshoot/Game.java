@@ -29,7 +29,7 @@ import classes.Category;
 
 public class Game extends AppCompatActivity {
 
-    ImageView imageQuestion, heart1, heart2, heart3;
+    ImageView imageQuestion, heart1, heart2, heart3, imageCheck, imageCross;
     Button buttonA, buttonB, buttonC, buttonD;
     TextView textViewScore, textViewTimer;
     int score = 0;
@@ -49,16 +49,23 @@ public class Game extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        // Declare the views.
         imageQuestion = (ImageView) findViewById(R.id.imageQuestion) ;
         heart1 = (ImageView) findViewById(R.id.heart1) ;
         heart2 = (ImageView) findViewById(R.id.heart2) ;
         heart3 = (ImageView) findViewById(R.id.heart3) ;
+        imageCheck = (ImageView)findViewById(R.id.imageCheck);
+        imageCross = (ImageView)findViewById(R.id.imageCross);
         buttonA = (Button)findViewById(R.id.buttonA);
         buttonB = (Button)findViewById(R.id.buttonB);
         buttonC = (Button)findViewById(R.id.buttonC);
         buttonD = (Button)findViewById(R.id.buttonD);
         textViewScore = (TextView)findViewById(R.id.textViewScore);
         textViewTimer = (TextView)findViewById(R.id.textViewTimer);
+
+        imageCheck.setVisibility(View.INVISIBLE);
+        imageCross.setVisibility(View.INVISIBLE);
+
         Intent intent = getIntent();
         category = (Category)intent.getSerializableExtra("category");
         setQuestion();
@@ -177,17 +184,35 @@ public class Game extends AppCompatActivity {
         setQuestion();
         timer = 6;
         checkGame();
+
+        // Display the check mark for 250 milliseconds.
+        imageCheck.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                imageCheck.setVisibility(View.INVISIBLE);
+            }
+        }, 250);
     }
 
     /**
      * This function gets called every time the user clicks on an incorrect answer.
      */
     private void incorrect() {
-        score -= 300;
+        score -= 100;
         health--;
         textViewScore.setText(score + "");
         updateHealth();
         checkGame();
+
+        // Display the cross mark for 250 milliseconds.
+        imageCross.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                imageCross.setVisibility(View.INVISIBLE);
+            }
+        }, 250);
     }
 
     private void updateHealth() {
