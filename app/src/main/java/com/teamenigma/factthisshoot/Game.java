@@ -6,12 +6,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class Game extends AppCompatActivity {
     private ImageView imageQuestion, imageHeart1, imageHeart2, imageHeart3, imageCheck, imageCross;
     private Button buttonA, buttonB, buttonC, buttonD;
     private TextView textViewScore, textViewTimer;
+    private ProgressBar progressBarHorizonal;
     private int score = 0;
     private int timer = 5; // The Game will start with 10 seconds left.
     private int health = 3;
@@ -63,6 +66,8 @@ public class Game extends AppCompatActivity {
         buttonD = (Button)findViewById(R.id.buttonD);
         textViewScore = (TextView)findViewById(R.id.textViewScore);
         textViewTimer = (TextView)findViewById(R.id.textViewTimer);
+        progressBarHorizonal = (ProgressBar)findViewById(R.id.progressBarHorizonal);
+        progressBarHorizonal.setMax(5);
 
         imageCheck.setVisibility(View.INVISIBLE);
         imageCross.setVisibility(View.INVISIBLE);
@@ -210,6 +215,7 @@ public class Game extends AppCompatActivity {
 
         textViewScore.setText(score + "");
         textViewTimer.setText(timer + "");
+        progressBarHorizonal.setProgress(timer);
 
     }
 
@@ -308,6 +314,7 @@ public class Game extends AppCompatActivity {
      */
     private void updateTimer() {
         textViewTimer.setText(timer + "");
+        progressBarHorizonal.setProgress(timer);
         checkGame();
     }
 

@@ -86,6 +86,7 @@
             app:srcCompat="@drawable/heart"
             tools:layout_editor_absoluteX="226dp"
             tools:layout_editor_absoluteY="16dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -113,6 +114,16 @@
             android:cropToPadding="false"
             android:textAlignment="center"
             android:textSize="24sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBarHorizonal"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:progressTint="@color/common_google_signin_btn_text_dark_focused"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="84dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -203,6 +214,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.501"
-        app:srcCompat="@drawable/cross" />
+        app:srcCompat="@drawable/cross"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
 </android.support.constraint.ConstraintLayout>
