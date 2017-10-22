@@ -61,7 +61,7 @@
         android:layout_marginEnd="8dp">
 
         <ImageView
-            android:id="@+id/heart1"
+            android:id="@+id/imageHeart1"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
@@ -70,7 +70,7 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <ImageView
-            android:id="@+id/heart2"
+            android:id="@+id/imageHeart2"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
@@ -79,7 +79,7 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <ImageView
-            android:id="@+id/heart3"
+            android:id="@+id/imageHeart3"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"

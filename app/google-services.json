@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "556605380910-41cvmhg4aiu7eaennmftsaq9u08nt3sh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamenigma.factthisshoot",
+            "certificate_hash": "823d7818161ad4b8ee5aabc9506bf7f0ab854bf9"
+          }
+        },
+        {
+          "client_id": "556605380910-oe1fh24nr5fru891mn2h3gjrc0cd1iuf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamenigma.factthisshoot",
+            "certificate_hash": "47e0d12b2e3831cca4a300e92b88a6c0bdce9a4c"
+          }
+        },
+        {
           "client_id": "556605380910-mtua40v3alhparcpn73lluj80h51rjn0.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556605380910-mtua40v3alhparcpn73lluj80h51rjn0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

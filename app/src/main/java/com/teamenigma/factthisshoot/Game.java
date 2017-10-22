@@ -1,21 +1,14 @@
 package com.teamenigma.factthisshoot;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,7 +26,7 @@ import classes.Category;
 
 public class Game extends AppCompatActivity {
 
-    private ImageView imageQuestion, heart1, heart2, heart3, imageCheck, imageCross;
+    private ImageView imageQuestion, imageHeart1, imageHeart2, imageHeart3, imageCheck, imageCross;
     private Button buttonA, buttonB, buttonC, buttonD;
     private TextView textViewScore, textViewTimer;
     private int score = 0;
@@ -43,7 +36,6 @@ public class Game extends AppCompatActivity {
     private Category category;
     private Item item;
     private Bitmap questionBitmap;
-    private String answer;
     private ArrayList<String> optionList;
 
     final Handler handler = new Handler();
@@ -60,9 +52,9 @@ public class Game extends AppCompatActivity {
 
         // Declare the views.
         imageQuestion = (ImageView) findViewById(R.id.imageQuestion) ;
-        heart1 = (ImageView) findViewById(R.id.heart1) ;
-        heart2 = (ImageView) findViewById(R.id.heart2) ;
-        heart3 = (ImageView) findViewById(R.id.heart3) ;
+        imageHeart1 = (ImageView) findViewById(R.id.imageHeart1) ;
+        imageHeart2 = (ImageView) findViewById(R.id.imageHeart2) ;
+        imageHeart3 = (ImageView) findViewById(R.id.imageHeart3) ;
         imageCheck = (ImageView)findViewById(R.id.imageCheck);
         imageCross = (ImageView)findViewById(R.id.imageCross);
         buttonA = (Button)findViewById(R.id.buttonA);
@@ -79,6 +71,8 @@ public class Game extends AppCompatActivity {
         category = (Category)intent.getSerializableExtra("category");
         setQuestion();
         loadSounds();
+
+        getSupportActionBar().setTitle(category.getName());  // provide compatibility to all the versions
 
         imageQuestion.setImageBitmap(questionBitmap);
 
@@ -148,9 +142,12 @@ public class Game extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        // This function is empty to disable the back button.
     }
 
+    /**
+     * This function loads the audio files into SoundPool.
+     */
     public void loadSounds() {
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
@@ -180,7 +177,6 @@ public class Game extends AppCompatActivity {
             endGame();
 
         questionBitmap = BitmapFactory.decodeResource(getResources(), item.getQuestion());
-        answer = item.getAnswer();
 
         // clear existing list, add options, and shuffle
         optionList = new ArrayList<>();
@@ -264,27 +260,30 @@ public class Game extends AppCompatActivity {
         }, 250);
     }
 
+    /**
+     * This function sets the hearts visible or not depending on the health value of the user.
+     */
     private void updateHealth() {
         switch(health){
             case 0:
-                heart1.setVisibility(View.INVISIBLE);
-                heart2.setVisibility(View.INVISIBLE);
-                heart3.setVisibility(View.INVISIBLE);
+                imageHeart1.setVisibility(View.INVISIBLE);
+                imageHeart2.setVisibility(View.INVISIBLE);
+                imageHeart3.setVisibility(View.INVISIBLE);
                 break;
             case 1:
-                heart1.setVisibility(View.VISIBLE);
-                heart2.setVisibility(View.INVISIBLE);
-                heart3.setVisibility(View.INVISIBLE);
+                imageHeart1.setVisibility(View.VISIBLE);
+                imageHeart2.setVisibility(View.INVISIBLE);
+                imageHeart3.setVisibility(View.INVISIBLE);
                 break;
             case 2:
-                heart1.setVisibility(View.VISIBLE);
-                heart2.setVisibility(View.VISIBLE);
-                heart3.setVisibility(View.INVISIBLE);
+                imageHeart1.setVisibility(View.VISIBLE);
+                imageHeart2.setVisibility(View.VISIBLE);
+                imageHeart3.setVisibility(View.INVISIBLE);
                 break;
             case 3:
-                heart1.setVisibility(View.VISIBLE);
-                heart2.setVisibility(View.VISIBLE);
-                heart3.setVisibility(View.VISIBLE);
+                imageHeart1.setVisibility(View.VISIBLE);
+                imageHeart2.setVisibility(View.VISIBLE);
+                imageHeart3.setVisibility(View.VISIBLE);
                 break;
         }
     }
