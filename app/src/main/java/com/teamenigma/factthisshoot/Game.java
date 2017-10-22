@@ -31,22 +31,25 @@ public class Game extends AppCompatActivity {
     private ImageView imageQuestion, imageHeart1, imageHeart2, imageHeart3, imageCheck, imageCross;
     private Button buttonA, buttonB, buttonC, buttonD;
     private TextView textViewScore, textViewTimer;
-    private ProgressBar progressBarHorizonal;
-    private int score = 0;
-    private int timer = 5; // The Game will start with 10 seconds left.
-    private int health = 3;
+    private ProgressBar progressBarHorizontal;
 
     private Category category;
     private Item item;
     private Bitmap questionBitmap;
     private ArrayList<String> optionList;
 
-    final Handler handler = new Handler();
+    private int score = 0;
+    private int timer = 5; // The Game will start with 10 seconds left.
+    private int health = 3;
+
+    private Handler handler = new Handler();    // Timer
 
     private SoundPool soundPool;
     private int soundCorrect, soundIncorrect;
     private boolean soundLoaded = false;
     private float actualVolume, maxVolume, volume;
+
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +69,14 @@ public class Game extends AppCompatActivity {
         buttonD = (Button)findViewById(R.id.buttonD);
         textViewScore = (TextView)findViewById(R.id.textViewScore);
         textViewTimer = (TextView)findViewById(R.id.textViewTimer);
-        progressBarHorizonal = (ProgressBar)findViewById(R.id.progressBarHorizonal);
-        progressBarHorizonal.setMax(5);
+        progressBarHorizontal = (ProgressBar)findViewById(R.id.progressBarHorizonal);
+        progressBarHorizontal.setMax(5);
 
         imageCheck.setVisibility(View.INVISIBLE);
         imageCross.setVisibility(View.INVISIBLE);
 
         Intent intent = getIntent();
         category = (Category)intent.getSerializableExtra("category");
-        setQuestion();
         loadSounds();
 
         getSupportActionBar().setTitle(category.getName());  // provide compatibility to all the versions
@@ -141,7 +143,21 @@ public class Game extends AppCompatActivity {
             }
         });
 
-        startTimer();
+        countDownTimer = new CountDownTimer(5000, 10) {
+            public void onTick(long millisUntilFinished) {
+                textViewTimer.setText((millisUntilFinished / 1000 + 1) + "");
+                progressBarHorizontal.setProgress( (int) millisUntilFinished / 1000);
+                timer = (int) millisUntilFinished / 1000;
+            }
+            public void onFinish() {
+                incorrect();
+            }
+        };
+
+        //startTimer();
+        //setCountDownTimer();
+
+        setQuestion();
 
     }
 
@@ -176,46 +192,53 @@ public class Game extends AppCompatActivity {
     private void setQuestion() {
 
         // If the Category still has Items, get one Item else end Game.
-        if(category.canGet())
+        if(category.canGet()) {
             item = category.getItem();
-        else
+
+            questionBitmap = BitmapFactory.decodeResource(getResources(), item.getQuestion());
+
+            // clear existing list, add options, and shuffle
+            optionList = new ArrayList<>();
+            optionList.add(item.getOption1());
+            optionList.add(item.getOption2());
+            optionList.add(item.getOption3());
+            optionList.add(item.getAnswer());
+            Collections.shuffle(optionList);
+
+            buttonA.setBackgroundResource(android.R.drawable.btn_default);
+            buttonB.setBackgroundResource(android.R.drawable.btn_default);
+            buttonC.setBackgroundResource(android.R.drawable.btn_default);
+            buttonD.setBackgroundResource(android.R.drawable.btn_default);
+
+            // Clear the colors that were applied to the buttons.
+            buttonA.getBackground().clearColorFilter();
+            buttonB.getBackground().clearColorFilter();
+            buttonC.getBackground().clearColorFilter();
+            buttonD.getBackground().clearColorFilter();
+
+            imageQuestion.setImageBitmap(questionBitmap);
+            buttonA.setText(optionList.get(0));
+            buttonB.setText(optionList.get(1));
+            buttonC.setText(optionList.get(2));
+            buttonD.setText(optionList.get(3));
+
+            // Re-enables all buttons that were disabled when they were incorrectly clicked on.
+            buttonA.setEnabled(true);
+            buttonB.setEnabled(true);
+            buttonC.setEnabled(true);
+            buttonD.setEnabled(true);
+
+            textViewScore.setText(score + "");
+            textViewTimer.setText(timer + "");
+            progressBarHorizontal.setProgress(timer);
+
+            countDownTimer.start();
+        }
+        // If there are no more items left.
+        else {
+            countDownTimer.cancel();
             endGame();
-
-        questionBitmap = BitmapFactory.decodeResource(getResources(), item.getQuestion());
-
-        // clear existing list, add options, and shuffle
-        optionList = new ArrayList<>();
-        optionList.add(item.getOption1());
-        optionList.add(item.getOption2());
-        optionList.add(item.getOption3());
-        optionList.add(item.getAnswer());
-        Collections.shuffle(optionList);
-
-        buttonA.setBackgroundResource(android.R.drawable.btn_default);
-        buttonB.setBackgroundResource(android.R.drawable.btn_default);
-        buttonC.setBackgroundResource(android.R.drawable.btn_default);
-        buttonD.setBackgroundResource(android.R.drawable.btn_default);
-
-        buttonA.getBackground().clearColorFilter();
-        buttonB.getBackground().clearColorFilter();
-        buttonC.getBackground().clearColorFilter();
-        buttonD.getBackground().clearColorFilter();
-
-        imageQuestion.setImageBitmap(questionBitmap);
-        buttonA.setText(optionList.get(0));
-        buttonB.setText(optionList.get(1));
-        buttonC.setText(optionList.get(2));
-        buttonD.setText(optionList.get(3));
-
-        // Re-enables all buttons that were disabled when they were incorrectly clicked on.
-        buttonA.setEnabled(true);
-        buttonB.setEnabled(true);
-        buttonC.setEnabled(true);
-        buttonD.setEnabled(true);
-
-        textViewScore.setText(score + "");
-        textViewTimer.setText(timer + "");
-        progressBarHorizonal.setProgress(timer);
+        }
 
     }
 
@@ -223,15 +246,14 @@ public class Game extends AppCompatActivity {
      * This function gets called every time the user clicks on a correct answer.
      */
     private void correct() {
+        countDownTimer.cancel();
+
         score += 100;
         score += timer * 10;
-        setQuestion();
-        timer = 6;
-        checkGame();
+        timer = 5;
 
-        if (soundLoaded) {
+        if (soundLoaded)
             soundPool.play(soundCorrect, volume, volume, 1, 0, 1f);
-        }
 
         // Display the check mark for 250 milliseconds.
         imageCheck.setVisibility(View.VISIBLE);
@@ -241,20 +263,23 @@ public class Game extends AppCompatActivity {
                 imageCheck.setVisibility(View.INVISIBLE);
             }
         }, 250);
+
+        setQuestion();
     }
 
     /**
      * This function gets called every time the user clicks on an incorrect answer.
      */
     private void incorrect() {
+        countDownTimer.cancel();
+
         score -= 100;
         health--;
-        textViewScore.setText(score + "");
         updateHealth();
-        checkGame();
-        if (soundLoaded) {
+        timer = 5;
+
+        if (soundLoaded)
             soundPool.play(soundIncorrect, volume, volume, 1, 0, 1f);
-        }
 
         // Display the cross mark for 250 milliseconds.
         imageCross.setVisibility(View.VISIBLE);
@@ -264,6 +289,12 @@ public class Game extends AppCompatActivity {
                 imageCross.setVisibility(View.INVISIBLE);
             }
         }, 250);
+
+        if(checkGame(health))
+            setQuestion();
+        else
+            endGame();
+
     }
 
     /**
@@ -295,37 +326,19 @@ public class Game extends AppCompatActivity {
     }
 
     /**
-     * This function starts the timer which updates the timer every second.
-     */
-    private void startTimer() {
-        final int delay = 1000; //milliseconds
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                //do something
-                timer--;
-                updateTimer();
-                handler.postDelayed(this, delay);
-            }
-        }, delay);
-    }
-
-    /**
-     * This function gets called every second.
-     */
-    private void updateTimer() {
-        textViewTimer.setText(timer + "");
-        progressBarHorizonal.setProgress(timer);
-        checkGame();
-    }
-
-    /**
      * This function checks if the Game has been lost or not.
      * If game is over, go to class.GameOver while passing Integer.score
      */
     private void checkGame() {
-        if(timer == 0 || health == 0) {
+        if(health == 0) {
             endGame();
         }
+    }
+
+    private boolean checkGame(int health) {
+        if(health > 0)
+            return true;
+        return false;
     }
 
     /**
@@ -333,9 +346,9 @@ public class Game extends AppCompatActivity {
      * It brings the user to the GameOver Activity.
      */
     private void endGame() {
+        countDownTimer.cancel();
         Intent intent = new Intent(Game.this, GameOver.class);
         intent.putExtra("score", score);
-        handler.removeCallbacksAndMessages(null);   // This stops the Handler timer from going off in the next activity.
         finish();
         startActivity(intent);
     }
