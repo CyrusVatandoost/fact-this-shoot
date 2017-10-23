@@ -114,8 +114,6 @@ public class ChooseCategory extends AppCompatActivity {
 
     private void setupDatabase() {
 
-
-
         //Insert Dogs
         dbHelper.insertData("Beagle", R.drawable.beagle,  "Dogs");
         dbHelper.insertData("Bulldog", R.drawable.bulldog,  "Dogs");
@@ -131,7 +129,6 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Pug", R.drawable.pug,  "Dogs");
         dbHelper.insertData("Rottweiler", R.drawable.rottweiler,  "Dogs");
         dbHelper.insertData("Siberian Husky", R.drawable.siberian_husky,  "Dogs");
-
 
         //Insert Planets
         dbHelper.insertData("Earth", R.drawable.earth, "Planets");
