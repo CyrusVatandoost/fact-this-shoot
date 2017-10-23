@@ -30,7 +30,7 @@ public class Game extends AppCompatActivity {
 
     private ImageView imageQuestion, imageHeart1, imageHeart2, imageHeart3, imageCheck, imageCross;
     private Button buttonA, buttonB, buttonC, buttonD;
-    private TextView textViewScore, textViewTimer;
+    private TextView textViewScore, textViewTimer, textAddedScore;
     private ProgressBar progressBarHorizontal;
 
     private Category category;
@@ -69,6 +69,7 @@ public class Game extends AppCompatActivity {
         buttonD = (Button)findViewById(R.id.buttonD);
         textViewScore = (TextView)findViewById(R.id.textViewScore);
         textViewTimer = (TextView)findViewById(R.id.textViewTimer);
+        textAddedScore = (TextView)findViewById(R.id.textAddedScore);
         progressBarHorizontal = (ProgressBar)findViewById(R.id.progressBarHorizonal);
         progressBarHorizontal.setMax(5);
 
@@ -154,9 +155,7 @@ public class Game extends AppCompatActivity {
             }
         };
 
-        //startTimer();
-        //setCountDownTimer();
-
+        textAddedScore.setVisibility(View.INVISIBLE);
         setQuestion();
 
     }
@@ -248,8 +247,7 @@ public class Game extends AppCompatActivity {
     private void correct() {
         countDownTimer.cancel();
 
-        score += 100;
-        score += timer * 10;
+        addScore(100 + (timer * 10));
         timer = 5;
 
         if (soundLoaded)
@@ -273,7 +271,7 @@ public class Game extends AppCompatActivity {
     private void incorrect() {
         countDownTimer.cancel();
 
-        score -= 100;
+        addScore(-100);
         health--;
         updateHealth();
         timer = 5;
@@ -325,14 +323,25 @@ public class Game extends AppCompatActivity {
         }
     }
 
-    /**
-     * This function checks if the Game has been lost or not.
-     * If game is over, go to class.GameOver while passing Integer.score
-     */
-    private void checkGame() {
-        if(health == 0) {
-            endGame();
-        }
+    private void addScore(int num) {
+        score += num;
+        textAddedScore.setVisibility(View.VISIBLE);
+
+        if(num > 0)
+            textAddedScore.setText("+" + num);
+        else if(num == 0)
+            textAddedScore.setText("0");
+        else if(num < 0)
+            textAddedScore.setText(num + "");
+
+        new CountDownTimer(1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+
+            }
+            public void onFinish() {
+                textAddedScore.setVisibility(View.INVISIBLE);
+            }
+        }.start();
     }
 
     private boolean checkGame(int health) {
