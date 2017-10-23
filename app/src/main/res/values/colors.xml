@@ -12,5 +12,6 @@
 
     <color name="green">#60FF60</color>
     <color name="red">#FF6060</color>
+    <color name="pressed">#515151</color>
     <color name="yellow">#ffeb3b</color>
 </resources>

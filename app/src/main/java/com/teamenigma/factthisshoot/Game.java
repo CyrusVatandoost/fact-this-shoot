@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class Game extends AppCompatActivity {
 
     private ImageView imageQuestion, imageHeart1, imageHeart2, imageHeart3, imageCheck, imageCross;
     private Button buttonA, buttonB, buttonC, buttonD;
+    private ImageButton imageButtonMute;
     private TextView textViewScore, textViewTimer, textAddedScore;
     private ProgressBar progressBarHorizontal;
 
@@ -41,8 +43,6 @@ public class Game extends AppCompatActivity {
     private int score = 0;
     private int timer = 5; // The Game will start with 10 seconds left.
     private int health = 3;
-
-    private Handler handler = new Handler();    // Timer
 
     private SoundPool soundPool;
     private int soundCorrect, soundIncorrect;
@@ -63,16 +63,13 @@ public class Game extends AppCompatActivity {
         imageHeart3 = (ImageView) findViewById(R.id.imageHeart3) ;
         imageCheck = (ImageView)findViewById(R.id.imageCheck);
         imageCross = (ImageView)findViewById(R.id.imageCross);
-        buttonA = (Button)findViewById(R.id.buttonA);
-        buttonB = (Button)findViewById(R.id.buttonB);
-        buttonC = (Button)findViewById(R.id.buttonC);
-        buttonD = (Button)findViewById(R.id.buttonD);
         textViewScore = (TextView)findViewById(R.id.textViewScore);
         textViewTimer = (TextView)findViewById(R.id.textViewTimer);
         textAddedScore = (TextView)findViewById(R.id.textAddedScore);
         progressBarHorizontal = (ProgressBar)findViewById(R.id.progressBarHorizonal);
         progressBarHorizontal.setMax(5);
 
+        // Hide the Check and Cross graphics.
         imageCheck.setVisibility(View.INVISIBLE);
         imageCross.setVisibility(View.INVISIBLE);
 
@@ -84,6 +81,7 @@ public class Game extends AppCompatActivity {
 
         imageQuestion.setImageBitmap(questionBitmap);
 
+        buttonA = (Button)findViewById(R.id.buttonA);
         buttonA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +97,7 @@ public class Game extends AppCompatActivity {
             }
         });
 
+        buttonB = (Button)findViewById(R.id.buttonB);
         buttonB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +113,7 @@ public class Game extends AppCompatActivity {
             }
         });
 
+        buttonC = (Button)findViewById(R.id.buttonC);
         buttonC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +129,7 @@ public class Game extends AppCompatActivity {
             }
         });
 
+        buttonD = (Button)findViewById(R.id.buttonD);
         buttonD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,6 +142,14 @@ public class Game extends AppCompatActivity {
                     buttonD.setEnabled(false);
                     incorrect();
                 }
+            }
+        });
+
+        imageButtonMute = (ImageButton)findViewById(R.id.imageButtonMute);
+        imageButtonMute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mute();
             }
         });
 
@@ -163,6 +172,20 @@ public class Game extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // This function is empty to disable the back button.
+    }
+
+    public void mute() {
+        if(volume == 0) {
+            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+            actualVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+            volume = actualVolume / maxVolume;
+            imageButtonMute.getBackground().clearColorFilter();
+        }
+        else {
+            volume = 0;
+            imageButtonMute.getBackground().setColorFilter(getResources().getColor(R.color.pressed), PorterDuff.Mode.SRC_ATOP);
+        }
     }
 
     /**
@@ -323,6 +346,11 @@ public class Game extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function adds points to the score.
+     * It also displays how many points got added/subtracted for a second.
+     * @param num
+     */
     private void addScore(int num) {
         score += num;
         textAddedScore.setVisibility(View.VISIBLE);
