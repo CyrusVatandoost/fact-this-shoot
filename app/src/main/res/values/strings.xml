@@ -1,15 +1,13 @@
 <resources>
     <string name="app_name">Fact This Shoot</string>
     <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
+    <string name="signin_other_error">There was an issue with sign in, please try again later.</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
+    <string name="pref_description_social_recommendations">Recommendations for people to contact based on your message history
     </string>
 
     <string name="pref_title_display_name">Display name</string>

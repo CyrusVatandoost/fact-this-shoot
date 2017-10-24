@@ -8,10 +8,10 @@
     <color name="colorSecondaryLight">  #b2fab4</color>
     <color name="colorSecondaryDark">   #519657</color>
 
-    <color name="colorAccent">#4db6ac</color>
+    <color name="colorAccent">          #4db6ac</color>
 
-    <color name="green">#60FF60</color>
-    <color name="red">#FF6060</color>
-    <color name="pressed">#515151</color>
-    <color name="yellow">#ffeb3b</color>
+    <color name="green">                #60FF60</color>
+    <color name="red">                  #FF6060</color>
+    <color name="pressed">              #515151</color>
+    <color name="yellow">               #ffeb3b</color>
 </resources>

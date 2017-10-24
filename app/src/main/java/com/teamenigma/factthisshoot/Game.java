@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.games.Games;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -389,8 +391,9 @@ public class Game extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
 
         if(category.getName().equalsIgnoreCase("dogs")) {
-            if(prefs.getInt("hs_dogs", 0) < score)
+            if(prefs.getInt("hs_dogs", 0) < score) {
                 editor.putInt("hs_dogs", score);
+            }
         }
         else if(category.getName().equalsIgnoreCase("planets")) {
             if(prefs.getInt("hs_planets", 0) < score)
