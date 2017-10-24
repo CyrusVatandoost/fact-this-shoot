@@ -15,8 +15,8 @@
         android:theme="@style/AppTheme">
 
         <activity
-                android:name=".SplashActivity"
-                android:theme="@style/SplashTheme">
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -57,8 +57,16 @@
 
         <activity
             android:name=".GameOver"
-            android:label="Game Over!"
             android:theme="@style/FTS_Yellow.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".HighScores"
+            android:label="High Scores"
+            android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

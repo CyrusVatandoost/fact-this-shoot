@@ -1,6 +1,8 @@
 package com.teamenigma.factthisshoot;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
@@ -383,6 +385,23 @@ public class Game extends AppCompatActivity {
      * It brings the user to the GameOver Activity.
      */
     private void endGame() {
+        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if(category.getName().equalsIgnoreCase("dogs")) {
+            if(prefs.getInt("hs_dogs", 0) < score)
+                editor.putInt("hs_dogs", score);
+        }
+        else if(category.getName().equalsIgnoreCase("planets")) {
+            if(prefs.getInt("hs_planets", 0) < score)
+                editor.putInt("hs_planets", score);
+        }
+        else if(category.getName().equalsIgnoreCase("flowers")) {
+            if(prefs.getInt("hs_flowers", 0) < score)
+                editor.putInt("hs_flowers", score);
+        }
+        editor.commit();
+
         countDownTimer.cancel();
         Intent intent = new Intent(Game.this, GameOver.class);
         intent.putExtra("score", score);

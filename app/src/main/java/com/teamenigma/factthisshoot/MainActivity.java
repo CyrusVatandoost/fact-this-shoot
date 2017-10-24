@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.gms.ads.AdListener;
@@ -67,6 +68,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ChooseCategory.class);
+                startActivity(i);
+            }
+        });
+
+        Button buttonHighScores = (Button)findViewById(R.id.buttonHighScores);
+        buttonHighScores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), HighScores.class);
                 startActivity(i);
             }
         });
