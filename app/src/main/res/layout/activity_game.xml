@@ -121,7 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:progressTint="@color/common_google_signin_btn_text_dark_focused"
+            android:progressTint="@android:color/black"
             tools:layout_editor_absoluteX="52dp"
             tools:layout_editor_absoluteY="84dp" />
 

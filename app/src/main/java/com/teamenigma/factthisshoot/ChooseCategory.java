@@ -32,12 +32,19 @@ public class ChooseCategory extends AppCompatActivity {
 
     DatabaseHelper dbHelper;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose_category);
+        dbHelper = new DatabaseHelper(this);
+        setupDatabase();
+        createCategoryList();
+    }
+
     private void displayCategory(String categoryName){
         Cursor data = dbHelper.getCategoryData(categoryName);
-
-        while(data.moveToNext()) {
+        while(data.moveToNext())
             Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getString(3));//Print in console for debugging
-        }
     }
 
     public Category getCategory(String categoryName) {
@@ -69,17 +76,8 @@ public class ChooseCategory extends AppCompatActivity {
 
             temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and add to the category.
         }
-        temp.shuffleItems();
+        temp.shuffleItems();    // This randomizes the Items in the Category.
         return temp;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_category);
-        dbHelper = new DatabaseHelper(this);
-        setupDatabase();
-        createCategoryList();
     }
 
     /**
@@ -113,44 +111,42 @@ public class ChooseCategory extends AppCompatActivity {
     }
 
     private void setupDatabase() {
-
         //Insert Dogs
-        dbHelper.insertData("Beagle", R.drawable.beagle,  "Dogs");
-        dbHelper.insertData("Bulldog", R.drawable.bulldog,  "Dogs");
-        dbHelper.insertData("Chowchow", R.drawable.chowchow,  "Dogs");
-        dbHelper.insertData("Daschund", R.drawable.daschund,  "Dogs");
-        dbHelper.insertData("Doberman Pinscher", R.drawable.doberman_pinscher,  "Dogs");
-        dbHelper.insertData("German Shepherd", R.drawable.german_shepherd,  "Dogs");
-        dbHelper.insertData("Golden Retriever", R.drawable.golden_retriever,  "Dogs");
-        dbHelper.insertData("Great Dane",R.drawable.great_dane,  "Dogs");
-        dbHelper.insertData("Labrador", R.drawable.labrador,  "Dogs");
-        dbHelper.insertData("Pomeranian",R.drawable.pomeranian,  "Dogs");
-        dbHelper.insertData("Poodle", R.drawable.poodle,  "Dogs");
-        dbHelper.insertData("Pug", R.drawable.pug,  "Dogs");
-        dbHelper.insertData("Rottweiler", R.drawable.rottweiler,  "Dogs");
-        dbHelper.insertData("Siberian Husky", R.drawable.siberian_husky,  "Dogs");
+        dbHelper.insertData("Beagle", R.drawable.dogs_beagle,  "Dogs");
+        dbHelper.insertData("Bulldog", R.drawable.dogs_bulldog,  "Dogs");
+        dbHelper.insertData("Chowchow", R.drawable.dogs_chowchow,  "Dogs");
+        dbHelper.insertData("Daschund", R.drawable.dogs_daschund,  "Dogs");
+        dbHelper.insertData("Doberman Pinscher", R.drawable.dogs_dobermanpinscher,  "Dogs");
+        dbHelper.insertData("German Shepherd", R.drawable.dogs_germanshepherd,  "Dogs");
+        dbHelper.insertData("Golden Retriever", R.drawable.dogs_goldenretriever,  "Dogs");
+        dbHelper.insertData("Great Dane",R.drawable.dogs_greatdane,  "Dogs");
+        dbHelper.insertData("Labrador", R.drawable.dogs_labrador,  "Dogs");
+        dbHelper.insertData("Pomeranian",R.drawable.dogs_pomeranian,  "Dogs");
+        dbHelper.insertData("Poodle", R.drawable.dogs_poodle,  "Dogs");
+        dbHelper.insertData("Pug", R.drawable.dogs_pug, "Dogs");
+        dbHelper.insertData("Rottweiler", R.drawable.dogs_rottweiler,  "Dogs");
+        dbHelper.insertData("Siberian Husky", R.drawable.dogs_siberianhusky,  "Dogs");
 
         //Insert Planets
-        dbHelper.insertData("Earth", R.drawable.earth, "Planets");
-        dbHelper.insertData("Jupiter", R.drawable.jupiter, "Planets");
-        dbHelper.insertData("Mars", R.drawable.mars, "Planets");
-        dbHelper.insertData("Mercury", R.drawable.mercury, "Planets");
-        dbHelper.insertData("Neptune", R.drawable.neptune, "Planets");
-        dbHelper.insertData("Saturn", R.drawable.saturn, "Planets");
-        dbHelper.insertData("Uranus", R.drawable.uranus, "Planets");
-        dbHelper.insertData("Venus", R.drawable.venus, "Planets");
+        dbHelper.insertData("Earth", R.drawable.planet_earth, "Planets");
+        dbHelper.insertData("Jupiter", R.drawable.planet_jupiter, "Planets");
+        dbHelper.insertData("Mars", R.drawable.planet_mars, "Planets");
+        dbHelper.insertData("Mercury", R.drawable.planet_mercury, "Planets");
+        dbHelper.insertData("Neptune", R.drawable.planet_neptune, "Planets");
+        dbHelper.insertData("Saturn", R.drawable.planet_saturn, "Planets");
+        dbHelper.insertData("Uranus", R.drawable.planet_uranus, "Planets");
+        dbHelper.insertData("Venus", R.drawable.planet_venus, "Planets");
 
         //Insert Flowers
-        dbHelper.insertData("Cannabis", R.drawable.cannabis, "Flowers");
-        dbHelper.insertData("Daffodil", R.drawable.daffodil, "Flowers");
-        dbHelper.insertData("Hibiscus", R.drawable.hibiscus, "Flowers");
-        dbHelper.insertData("Hyacinth", R.drawable.hyacinth, "Flowers");
-        dbHelper.insertData("Lavender", R.drawable.lavender, "Flowers");
-        dbHelper.insertData("Lilac", R.drawable.lilac, "Flowers");
-        dbHelper.insertData("Lily", R.drawable.lily, "Flowers");
-        dbHelper.insertData("Orchid", R.drawable.orchids, "Flowers");
-        dbHelper.insertData("Rose", R.drawable.roses, "Flowers");
-        dbHelper.insertData("Sunflower", R.drawable.sunflower, "Flowers");
-
+        dbHelper.insertData("Cannabis", R.drawable.flowers_cannabis, "Flowers");
+        dbHelper.insertData("Daffodil", R.drawable.flowers_daffodil, "Flowers");
+        dbHelper.insertData("Hibiscus", R.drawable.flowers_hibiscus, "Flowers");
+        dbHelper.insertData("Hyacinth", R.drawable.flowers_hyacinth, "Flowers");
+        dbHelper.insertData("Lavender", R.drawable.flowers_lavender, "Flowers");
+        dbHelper.insertData("Lilac", R.drawable.flowers_lilac, "Flowers");
+        dbHelper.insertData("Lily", R.drawable.flowers_lily, "Flowers");
+        dbHelper.insertData("Orchid", R.drawable.flowers_orchid, "Flowers");
+        dbHelper.insertData("Rose", R.drawable.flowers_rose, "Flowers");
+        dbHelper.insertData("Sunflower", R.drawable.flowers_sunflower, "Flowers");
     }
 }
