@@ -10,6 +10,15 @@ import java.util.Collections;
 
 public class Category implements Serializable {
 
+    public int getImageID() {
+        return imageID;
+    }
+
+    public void setImageID(int imageID) {
+        this.imageID = imageID;
+    }
+
+    private int imageID; //This is the image representing the category that will be shown in the ChooseCategory screen
     private String name;
     private ArrayList<Item> items;
     private ArrayList<Item> answeredItems;
@@ -20,15 +29,17 @@ public class Category implements Serializable {
     public Category() {
         items = new ArrayList<>();
         answeredItems = new ArrayList<>();
+
     }
 
     /**
      * This function creates a new Category class with empty variables.
      */
-    public Category(String name) {
+    public Category(String name, int imageID) {
         items = new ArrayList<>();
         answeredItems = new ArrayList<>();
         this.name = name;
+        this.imageID = imageID;
     }
 
     /**
