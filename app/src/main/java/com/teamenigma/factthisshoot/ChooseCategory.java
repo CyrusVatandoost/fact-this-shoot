@@ -1,30 +1,25 @@
 package com.teamenigma.factthisshoot;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import java.lang.reflect.Array;
+import com.google.android.gms.games.Games;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.BitmapBytesConverter;
 import classes.Category;
 import classes.CategoryViewAdapter;
 import classes.DatabaseHelper;
+import classes.GoogleApiClientSingleton;
 import classes.Item;
 
 /**
@@ -37,6 +32,7 @@ public class ChooseCategory extends AppCompatActivity {
     ListView categoriesListView;
     CategoryViewAdapter categoriesListViewAdapter;
     ArrayList<Category> categoryList;
+    private GoogleApiClientSingleton singleton = GoogleApiClientSingleton.getInstance(null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +45,27 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
         setupDatabase();
         createCategoryList();
+
+        findViewById(R.id.buttonHighScoreDogs).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_dogs)), 10);
+            }
+        });
+
+        findViewById(R.id.buttonHighScorePlanets).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_planets)), 10);
+            }
+        });
+
     }
 
     private void displayCategory(String categoryName){
         Cursor data = dbHelper.getCategoryData(categoryName);
         while(data.moveToNext())
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getString(3));//Print in console for debugging
+            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getString(3)); //Print in console for debugging
     }
 
     public Category getCategory(String categoryName, int imageID) {

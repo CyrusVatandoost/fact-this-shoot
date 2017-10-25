@@ -14,26 +14,34 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.achievement.Achievement;
+import com.google.android.gms.games.achievement.AchievementBuffer;
+import com.google.android.gms.games.achievement.Achievements;
 import com.google.example.games.basegameutils.BaseGameUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import classes.GoogleApiClientSingleton;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private AdView mAdView;
-
     private GoogleApiClient mGoogleApiClient;
 
     private static int RC_SIGN_IN = 9001;
-
     private boolean mResolvingConnectionFailure = false;
     private boolean mAutoStartSignInFlow = true;
     private boolean mSignInClicked = false;
+    private boolean mExplicitSignOut = false;
+    private boolean mInSignInFlow = false;  // set to true when you're in the middle of the sign in flow to know you should not attempt to connect in onStart()
 
-    boolean mExplicitSignOut = false;
-    boolean mInSignInFlow = false;
-    // set to true when you're in the middle of the
-    // sign in flow, to know you should not attempt
-    // to connect in onStart()
+    final int REQUEST_ACHIEVEMENTS = 9004;
+    final int REQUEST_LEADERBOARD = 9002;
+    final int REQUEST_ALL_LEADERBOARDS = 9003;
+    final int RC_RESOLVE = 9001;
 
     @Override
     protected void onStart() {
@@ -41,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (!mInSignInFlow && !mExplicitSignOut) {
             // auto sign in
             mGoogleApiClient.connect();
+            GoogleApiClientSingleton.getInstance(mGoogleApiClient); // attaching the GoogleApiClient to the Singleton class
         }
     }
 
@@ -51,8 +60,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             return;
         }
 
-        // If the sign in button was clicked or if auto sign-in is enabled,
-        // launch the sign-in flow
+        // If the sign in button was clicked or if auto sign-in is enabled, launch the sign-in flow
         if (mSignInClicked || mAutoStartSignInFlow) {
             mAutoStartSignInFlow = false;
             mSignInClicked = false;
@@ -79,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MobileAds.initialize(this, "ca-app-pub-1026861718675475/3907447580");
+        MobileAds.initialize(this, "ca-app-pub-1026861718675475/3907447580");   // ad-id
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest.Builder adRequest = new AdRequest.Builder();
         if (BuildConfig.DEBUG) {
@@ -129,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        Button buttonHighScores = (Button)findViewById(R.id.buttonHighScores);
+        Button buttonHighScores = (Button)findViewById(R.id.buttonLocalHighScores);
         buttonHighScores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,16 +153,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 // add other APIs and scopes here as needed
                 .build();
+        GoogleApiClientSingleton.getInstance(mGoogleApiClient);
 
+        // Sign in button
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // start the asynchronous sign in flow
                 mSignInClicked = true;
                 mGoogleApiClient.connect();
+/*                if(mGoogleApiClient.isConnected())
+                    loadAchievements();*/
             }
         });
 
+        // Sign out button
         findViewById(R.id.sign_out_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,9 +189,57 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         findViewById(R.id.buttonOnlineHighScores).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, R.string.leaderboard_best_in_dogs + ""), 10);
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, getBaseContext().getString(R.string.leaderboard_top_scorers_dogs)), 10);
             }
         });
+
+        findViewById(R.id.buttonHelloWorld).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Games.Achievements.unlock(mGoogleApiClient, getBaseContext().getString(R.string.achievement_hello_world));
+            }
+        });
+
+        // View all achievements button
+        findViewById(R.id.buttonAchievements).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
+            }
+        });
+
+    }
+
+    public void loadAchievements()  {
+
+        boolean fullLoad = false;  // set to 'true' to reload all achievements (ignoring cache)
+        long waitTime = 60;    // seconds to wait for achievements to load before timing out
+
+        // load achievements
+        PendingResult p = Games.Achievements.load(mGoogleApiClient, fullLoad);
+        Achievements.LoadAchievementsResult r = (Achievements.LoadAchievementsResult)p.await(waitTime, TimeUnit.SECONDS );
+        int status = r.getStatus().getStatusCode();
+        if ( status != GamesStatusCodes.STATUS_OK )  {
+            r.release();
+            return;           // Error Occured
+        }
+
+        // cache the loaded achievements
+        AchievementBuffer buf = r.getAchievements();
+        int bufSize = buf.getCount();
+        for (int i = 0; i < bufSize; i++)  {
+            Achievement ach = buf.get(i);
+
+            // here you now have access to the achievement's data
+            String id = ach.getAchievementId();  // the achievement ID string
+            boolean unlocked = ach.getState() == Achievement.STATE_UNLOCKED;  // is unlocked
+            boolean incremental = ach.getType() == Achievement.TYPE_INCREMENTAL;  // is incremental
+            int steps = 0;
+            if (incremental)
+                steps = ach.getCurrentSteps();  // current incremental steps
+        }
+        buf.close();
+        r.release();
     }
 
     @Override
@@ -188,17 +249,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
 
         // (your code here: update UI, enable functionality that depends on sign in, etc)
-        Games.Leaderboards.submitScore(mGoogleApiClient, R.string.leaderboard_best_in_dogs + "", 1337);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
 
     }
-
-/*    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }*/
 
 }
