@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.google.android.gms.games.Games;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Category;
+import classes.CategoryViewAdapter;
 import classes.DatabaseHelper;
 import classes.GoogleApiClientSingleton;
 import classes.Item;
@@ -26,30 +28,22 @@ import classes.Item;
 
 public class ChooseCategory extends AppCompatActivity {
 
-    private DatabaseHelper dbHelper;
+    DatabaseHelper dbHelper;
+    ListView categoriesListView;
+    CategoryViewAdapter categoriesListViewAdapter;
+    ArrayList<Category> categoryList;
     private GoogleApiClientSingleton singleton = GoogleApiClientSingleton.getInstance(null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_category);
+
+        categoriesListView = (ListView) findViewById(R.id.categoryListView);
+
         dbHelper = new DatabaseHelper(this);
         setupDatabase();
         createCategoryList();
-
-        findViewById(R.id.buttonHighScoreDogs).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_dogs)), 10);
-            }
-        });
-
-        findViewById(R.id.buttonHighScorePlanets).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_planets)), 10);
-            }
-        });
 
     }
 
@@ -59,8 +53,8 @@ public class ChooseCategory extends AppCompatActivity {
             Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getString(3)); //Print in console for debugging
     }
 
-    public Category getCategory(String categoryName) {
-        Category temp = new Category(categoryName);
+    public Category getCategory(String categoryName, int imageID) {
+        Category temp = new Category(categoryName, imageID);
         Cursor data = dbHelper.getCategoryData(categoryName); // Get all of the data within the specified category
         /*
         Iterate through every tuple in the data.
@@ -86,7 +80,7 @@ public class ChooseCategory extends AppCompatActivity {
                 wrongAnswers[i] = wrongAnswer;//Add the name to the list of wrong answers
             }
 
-            temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and add to the category.
+            temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and ad to the category.
         }
         temp.shuffleItems();    // This randomizes the Items in the Category.
         return temp;
@@ -96,18 +90,23 @@ public class ChooseCategory extends AppCompatActivity {
      * This function adds makes Button(s) for all class.Category for it to be placed in the linear layout of class.ChooseCategory.
      */
     private void createCategoryList() {
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.linearLayoutCategory);
-        ArrayList<Category> categoryList = new ArrayList<>();
+        categoryList = new ArrayList<>();
 
         // Add the categories here.
-        categoryList.add(getCategory("Dogs"));
-        categoryList.add(getCategory("Planets"));
-        categoryList.add(getCategory("Flowers"));
+        categoryList.add(getCategory("Dogs", R.drawable.dogs_beagle));
+        categoryList.add(getCategory("Planets", R.drawable.planet_earth));
+        categoryList.add(getCategory("Flowers", R.drawable.flowers_sunflower));
 
+
+        categoriesListViewAdapter = new CategoryViewAdapter(getApplicationContext(),categoryList);
+
+        categoriesListView.setAdapter(categoriesListViewAdapter);
+
+        categoriesListViewAdapter.notifyDataSetChanged();
+
+        /*
         for(final Category c : categoryList) {
-
             displayCategory(c.getName());
-
             Button button = new Button(new ContextThemeWrapper(this, R.style.CategoryButton), null, 0);
             button.setText(c.getName());
             button.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +119,7 @@ public class ChooseCategory extends AppCompatActivity {
             });
             linearLayout.addView(button);
         }
+        */
     }
 
     private void setupDatabase() {
