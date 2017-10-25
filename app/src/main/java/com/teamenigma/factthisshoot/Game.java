@@ -24,6 +24,7 @@ import com.google.android.gms.games.Games;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import classes.GoogleApiClientSingleton;
 import classes.Item;
 import classes.Category;
 
@@ -408,6 +409,7 @@ public class Game extends AppCompatActivity {
         countDownTimer.cancel();
         Intent intent = new Intent(Game.this, GameOver.class);
         intent.putExtra("score", score);
+        intent.putExtra("category", category.getName());
         finish();
         startActivity(intent);
     }
