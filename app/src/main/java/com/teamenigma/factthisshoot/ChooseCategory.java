@@ -1,17 +1,10 @@
 package com.teamenigma.factthisshoot;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-
-import com.google.android.gms.games.Games;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,35 +84,13 @@ public class ChooseCategory extends AppCompatActivity {
      */
     private void createCategoryList() {
         categoryList = new ArrayList<>();
-
         // Add the categories here.
         categoryList.add(getCategory("Dogs", R.drawable.dogs_beagle));
         categoryList.add(getCategory("Planets", R.drawable.planet_earth));
         categoryList.add(getCategory("Flowers", R.drawable.flowers_sunflower));
-
-
         categoriesListViewAdapter = new CategoryViewAdapter(getApplicationContext(),categoryList);
-
         categoriesListView.setAdapter(categoriesListViewAdapter);
-
         categoriesListViewAdapter.notifyDataSetChanged();
-
-        /*
-        for(final Category c : categoryList) {
-            displayCategory(c.getName());
-            Button button = new Button(new ContextThemeWrapper(this, R.style.CategoryButton), null, 0);
-            button.setText(c.getName());
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getApplicationContext(), Game.class);
-                    i.putExtra("category", c);
-                    startActivity(i);
-                }
-            });
-            linearLayout.addView(button);
-        }
-        */
     }
 
     private void setupDatabase() {

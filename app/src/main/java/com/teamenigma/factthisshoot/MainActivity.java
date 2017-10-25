@@ -14,15 +14,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.games.GamesStatusCodes;
-import com.google.android.gms.games.achievement.Achievement;
-import com.google.android.gms.games.achievement.AchievementBuffer;
-import com.google.android.gms.games.achievement.Achievements;
 import com.google.example.games.basegameutils.BaseGameUtils;
-
-import java.util.concurrent.TimeUnit;
 
 import classes.GoogleApiClientSingleton;
 
@@ -79,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // Put code here to display the sign-in button
         findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+        findViewById(R.id.buttonOnlineHighScores).setEnabled(false);
+        findViewById(R.id.buttonHelloWorld).setEnabled(false);
+        findViewById(R.id.buttonAchievements).setEnabled(false);
 
     }
 
@@ -137,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        Button buttonHighScores = (Button)findViewById(R.id.buttonLocalHighScores);
+        final Button buttonHighScores = (Button)findViewById(R.id.buttonLocalHighScores);
         buttonHighScores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,8 +158,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 // start the asynchronous sign in flow
                 mSignInClicked = true;
                 mGoogleApiClient.connect();
-/*                if(mGoogleApiClient.isConnected())
-                    loadAchievements();*/
+                findViewById(R.id.buttonOnlineHighScores).setEnabled(true);
+                findViewById(R.id.buttonHelloWorld).setEnabled(true);
+                findViewById(R.id.buttonAchievements).setEnabled(true);
             }
         });
 
@@ -183,6 +180,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 // show sign-in button, hide the sign-out button
                 findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
                 findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+                findViewById(R.id.buttonOnlineHighScores).setEnabled(false);
+                findViewById(R.id.buttonHelloWorld).setEnabled(false);
+                findViewById(R.id.buttonAchievements).setEnabled(false);
             }
         });
 
@@ -208,38 +208,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-    }
-
-    public void loadAchievements()  {
-
-        boolean fullLoad = false;  // set to 'true' to reload all achievements (ignoring cache)
-        long waitTime = 60;    // seconds to wait for achievements to load before timing out
-
-        // load achievements
-        PendingResult p = Games.Achievements.load(mGoogleApiClient, fullLoad);
-        Achievements.LoadAchievementsResult r = (Achievements.LoadAchievementsResult)p.await(waitTime, TimeUnit.SECONDS );
-        int status = r.getStatus().getStatusCode();
-        if ( status != GamesStatusCodes.STATUS_OK )  {
-            r.release();
-            return;           // Error Occured
-        }
-
-        // cache the loaded achievements
-        AchievementBuffer buf = r.getAchievements();
-        int bufSize = buf.getCount();
-        for (int i = 0; i < bufSize; i++)  {
-            Achievement ach = buf.get(i);
-
-            // here you now have access to the achievement's data
-            String id = ach.getAchievementId();  // the achievement ID string
-            boolean unlocked = ach.getState() == Achievement.STATE_UNLOCKED;  // is unlocked
-            boolean incremental = ach.getType() == Achievement.TYPE_INCREMENTAL;  // is incremental
-            int steps = 0;
-            if (incremental)
-                steps = ach.getCurrentSteps();  // current incremental steps
-        }
-        buf.close();
-        r.release();
     }
 
     @Override

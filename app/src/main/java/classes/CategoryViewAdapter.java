@@ -2,17 +2,14 @@ package classes;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamenigma.factthisshoot.Game;
-import com.teamenigma.factthisshoot.MainActivity;
 import com.teamenigma.factthisshoot.R;
 
 import java.util.ArrayList;
@@ -21,25 +18,17 @@ import java.util.ArrayList;
  * Created by Rgee on 25/10/2017.
  */
 
-
-
-
 public class CategoryViewAdapter extends BaseAdapter {
 
     private ArrayList<Category> categories;
     private Context context;
-
     private static LayoutInflater inflater = null;
 
-    public CategoryViewAdapter(Context context, ArrayList<Category> categories)
-    {
+    public CategoryViewAdapter(Context context, ArrayList<Category> categories) {
         this.context = context;
         this.categories = categories;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-
-
 
     /**
      * How many items are in the data set represented by this Adapter.
@@ -92,6 +81,7 @@ public class CategoryViewAdapter extends BaseAdapter {
      * @param parent      The parent that this view will eventually be attached to
      * @return A View corresponding to the data at the specified position.
      */
+
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
@@ -109,7 +99,6 @@ public class CategoryViewAdapter extends BaseAdapter {
         //INSERT CATEGORY HIGHSCORE HERE
         //holder.highScore.setText(/*Insert high score here*/);
 
-
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,8 +110,6 @@ public class CategoryViewAdapter extends BaseAdapter {
                 context.startActivity(i);
             }
         });
-
-
 
         return rowView;
     }
