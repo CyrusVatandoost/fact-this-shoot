@@ -56,6 +56,7 @@ public class ChooseCategory extends AppCompatActivity {
         for(int j = 0; j < 50 ; j ++)
         {
             while(data.moveToNext()) {
+
                 //Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
 
                 int pictureID = data.getInt(2); //Retrieve the image ID of the answer
