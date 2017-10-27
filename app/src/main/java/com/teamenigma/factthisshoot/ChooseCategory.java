@@ -128,5 +128,20 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Orchid", R.drawable.flowers_orchid, "Flowers");
         dbHelper.insertData("Rose", R.drawable.flowers_rose, "Flowers");
         dbHelper.insertData("Sunflower", R.drawable.flowers_sunflower, "Flowers");
+
+        //Insert Sports
+        dbHelper.insertData("American Football", R.drawable.sports_americanfootball, "Sports");
+        dbHelper.insertData("Baseball", R.drawable.sports_baseball, "Sports");
+        dbHelper.insertData("Basketball", R.drawable.sports_basketball, "Sports");
+        dbHelper.insertData("Bowling", R.drawable.sports_bowling, "Sports");
+        dbHelper.insertData("Boxing", R.drawable.sports_boxing, "Sports");
+        dbHelper.insertData("Cue Sports", R.drawable.sports_cuesports, "Sports");
+        dbHelper.insertData("Cycling", R.drawable.sports_cycling, "Sports");
+        dbHelper.insertData("Darts", R.drawable.sports_darts, "Sports");
+        dbHelper.insertData("Football", R.drawable.sports_football, "Sports");
+        dbHelper.insertData("Ice Hockey", R.drawable.sports_icehockey, "Sports");
+        dbHelper.insertData("Lacrosse", R.drawable.sports_lacrosse, "Sports");
+        dbHelper.insertData("Swimming", R.drawable.sports_swimming, "Sports");
+        dbHelper.insertData("Tennis", R.drawable.sports_tennis, "Sports");
     }
 }
