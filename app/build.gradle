@@ -7,10 +7,10 @@ android {
         applicationId "com.teamenigma.factthisshoot"
         minSdkVersion 19
         targetSdkVersion 25
-        versionName '1.4.0'
+        versionName '1.5.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        versionCode 6
+        versionCode 7
         multiDexEnabled true
     }
     buildTypes {
