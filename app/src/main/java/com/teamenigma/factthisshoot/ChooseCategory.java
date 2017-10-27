@@ -53,7 +53,7 @@ public class ChooseCategory extends AppCompatActivity {
         For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
         The other three choices that are wrong will be randomly selected.
          */
-        for(int j = 0; j < 50 ; j ++)
+        for(int j = 0; j < 5 ; j ++)
         {
             while(data.moveToNext()) {
 
