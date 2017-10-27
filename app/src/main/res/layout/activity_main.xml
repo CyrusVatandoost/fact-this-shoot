@@ -41,27 +41,7 @@
         app:layout_constraintVertical_bias="0.38"
         app:srcCompat="@drawable/button_start" />
 
-    <Button
-        android:id="@+id/buttonOnlineHighScores"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Online High Scores"
-        android:textSize="14sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLocalHighScores" />
-
     <!-- sign-in button -->
-    <Button
-        android:id="@+id/buttonLocalHighScores"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Local High Scores"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
@@ -84,24 +64,34 @@
         android:text="Sign Out"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/buttonHelloWorld"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/buttonLocalHighScores"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="Hello World"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonOnlineHighScores" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_person_black_24dp" />
 
-    <Button
-        android:id="@+id/buttonAchievements"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/buttonOnlineHighScores"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginLeft="8dp"
-        android:text="Achievements"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/adView" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/buttonLocalHighScores"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_public_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/buttonAchievements"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/buttonOnlineHighScores"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_stars_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>

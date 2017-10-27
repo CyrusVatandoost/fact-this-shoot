@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class HighScores extends AppCompatActivity {
 
     @Override
@@ -16,7 +14,7 @@ public class HighScores extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_scores);
 
-        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey",   Context.MODE_PRIVATE);
+        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
 
         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.linearLayoutHighScores);
 

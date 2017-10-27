@@ -1,5 +1,7 @@
 package com.teamenigma.factthisshoot;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,15 +27,12 @@ public class ChooseCategory extends AppCompatActivity {
     ListView categoriesListView;
     CategoryViewAdapter categoriesListViewAdapter;
     ArrayList<Category> categoryList;
-    private GoogleApiClientSingleton singleton = GoogleApiClientSingleton.getInstance(null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_category);
-
         categoriesListView = (ListView) findViewById(R.id.categoryListView);
-
         dbHelper = new DatabaseHelper(this);
         setupDatabase();
         createCategoryList();
@@ -59,11 +58,8 @@ public class ChooseCategory extends AppCompatActivity {
 
             int pictureID = data.getInt(2); //Retrieve the image ID of the answer
             String answer = data.getString(1);//Retrieve the correct answer
-
             String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
-
             List<String> answers = new ArrayList<>(); // List of ALL of the answers. The purpose of this list is to avoid repetition of selecting the same answer.
-
             answers.add(answer); //Add the correct answer into the list.
 
             // Retrieve the other three random wrong answers
@@ -88,7 +84,8 @@ public class ChooseCategory extends AppCompatActivity {
         categoryList.add(getCategory("Dogs", R.drawable.dogs_beagle));
         categoryList.add(getCategory("Planets", R.drawable.planet_earth));
         categoryList.add(getCategory("Flowers", R.drawable.flowers_sunflower));
-        categoriesListViewAdapter = new CategoryViewAdapter(getApplicationContext(),categoryList);
+        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        categoriesListViewAdapter = new CategoryViewAdapter(getApplicationContext(), categoryList, prefs);
         categoriesListView.setAdapter(categoriesListViewAdapter);
         categoriesListViewAdapter.notifyDataSetChanged();
     }

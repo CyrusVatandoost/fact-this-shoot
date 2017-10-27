@@ -2,6 +2,8 @@ package classes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +24,13 @@ public class CategoryViewAdapter extends BaseAdapter {
 
     private ArrayList<Category> categories;
     private Context context;
+    private SharedPreferences prefs;
     private static LayoutInflater inflater = null;
 
-    public CategoryViewAdapter(Context context, ArrayList<Category> categories) {
+    public CategoryViewAdapter(Context context, ArrayList<Category> categories, SharedPreferences prefs) {
         this.context = context;
         this.categories = categories;
+        this.prefs = prefs;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -96,8 +100,10 @@ public class CategoryViewAdapter extends BaseAdapter {
         holder.categoryImage.setImageResource(categories.get(position).getImageID());
         holder.categoryName.setText(categories.get(position).getName());
 
-        //INSERT CATEGORY HIGHSCORE HERE
-        //holder.highScore.setText(/*Insert high score here*/);
+        String temp = "hs_" + categories.get(position).getName().toLowerCase();
+
+        //INSERT CATEGORY HIGH SCORE HERE
+        holder.highScore.setText(prefs.getInt(temp, 0) + "");
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,4 +119,5 @@ public class CategoryViewAdapter extends BaseAdapter {
 
         return rowView;
     }
+
 }

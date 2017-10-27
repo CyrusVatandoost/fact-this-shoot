@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.google.android.gms.ads.AdListener;
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // Put code here to display the sign-in button
         findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
         findViewById(R.id.buttonOnlineHighScores).setEnabled(false);
-        findViewById(R.id.buttonHelloWorld).setEnabled(false);
         findViewById(R.id.buttonAchievements).setEnabled(false);
 
     }
@@ -124,8 +124,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        ImageView imageStart = (ImageView)findViewById(R.id.imageStart);
-        imageStart.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.imageStart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ChooseCategory.class);
@@ -133,8 +132,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        final Button buttonHighScores = (Button)findViewById(R.id.buttonLocalHighScores);
-        buttonHighScores.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.buttonLocalHighScores).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), HighScores.class);
@@ -159,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 mSignInClicked = true;
                 mGoogleApiClient.connect();
                 findViewById(R.id.buttonOnlineHighScores).setEnabled(true);
-                findViewById(R.id.buttonHelloWorld).setEnabled(true);
                 findViewById(R.id.buttonAchievements).setEnabled(true);
             }
         });
@@ -181,21 +178,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
                 findViewById(R.id.sign_out_button).setVisibility(View.GONE);
                 findViewById(R.id.buttonOnlineHighScores).setEnabled(false);
-                findViewById(R.id.buttonHelloWorld).setEnabled(false);
                 findViewById(R.id.buttonAchievements).setEnabled(false);
             }
         });
 
+        // View all high scores
         findViewById(R.id.buttonOnlineHighScores).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, getBaseContext().getString(R.string.leaderboard_top_scorers_dogs)), 10);
-            }
-        });
-
-        findViewById(R.id.buttonHelloWorld).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient), REQUEST_LEADERBOARD);
                 Games.Achievements.unlock(mGoogleApiClient, getBaseContext().getString(R.string.achievement_hello_world));
             }
         });

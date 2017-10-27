@@ -185,11 +185,11 @@ public class Game extends AppCompatActivity {
             actualVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
             maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
             volume = actualVolume / maxVolume;
-            imageButtonMute.getBackground().clearColorFilter();
+            imageButtonMute.setImageResource(R.drawable.ic_volume_up_black_24dp);
         }
         else {
             volume = 0;
-            imageButtonMute.getBackground().setColorFilter(getResources().getColor(R.color.pressed), PorterDuff.Mode.SRC_ATOP);
+            imageButtonMute.setImageResource(R.drawable.ic_volume_off_black_24dp);
         }
     }
 
