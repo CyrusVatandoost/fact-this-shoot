@@ -53,24 +53,31 @@ public class ChooseCategory extends AppCompatActivity {
         For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
         The other three choices that are wrong will be randomly selected.
          */
-        while(data.moveToNext()) {
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
+        for(int j = 0; j < 50 ; j ++)
+        {
+            while(data.moveToNext()) {
+                //Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
 
-            int pictureID = data.getInt(2); //Retrieve the image ID of the answer
-            String answer = data.getString(1);//Retrieve the correct answer
-            String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
-            List<String> answers = new ArrayList<>(); // List of ALL of the answers. The purpose of this list is to avoid repetition of selecting the same answer.
-            answers.add(answer); //Add the correct answer into the list.
+                int pictureID = data.getInt(2); //Retrieve the image ID of the answer
+                String answer = data.getString(1);//Retrieve the correct answer
+                String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
+                List<String> answers = new ArrayList<>(); // List of ALL of the answers. The purpose of this list is to avoid repetition of selecting the same answer.
+                answers.add(answer); //Add the correct answer into the list.
 
-            // Retrieve the other three random wrong answers
-            for (int i = 0 ; i < 3; i++) {
-                String wrongAnswer = dbHelper.getWrongAnswerID(answers, categoryName);//Retrieve the wrong answer
-                answers.add(wrongAnswer);//Add the wrong answer to the list of answers to avoid selecting it again
-                wrongAnswers[i] = wrongAnswer;//Add the name to the list of wrong answers
+                // Retrieve the other three random wrong answers
+                for (int i = 0 ; i < 3; i++) {
+                    String wrongAnswer = dbHelper.getWrongAnswerID(answers, categoryName);//Retrieve the wrong answer
+                    answers.add(wrongAnswer);//Add the wrong answer to the list of answers to avoid selecting it again
+                    wrongAnswers[i] = wrongAnswer;//Add the name to the list of wrong answers
+                }
+
+                temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and ad to the category.
             }
+            data.moveToFirst();
 
-            temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and ad to the category.
+
         }
+
         temp.shuffleItems();    // This randomizes the Items in the Category.
         return temp;
     }
@@ -84,6 +91,7 @@ public class ChooseCategory extends AppCompatActivity {
         categoryList.add(getCategory("Dogs", R.drawable.dogs_beagle));
         categoryList.add(getCategory("Planets", R.drawable.planet_earth));
         categoryList.add(getCategory("Flowers", R.drawable.flowers_sunflower));
+        categoryList.add(getCategory("Sports", R.drawable.sports_bowling));
         SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
         categoriesListViewAdapter = new CategoryViewAdapter(getApplicationContext(), categoryList, prefs);
         categoriesListView.setAdapter(categoriesListViewAdapter);
