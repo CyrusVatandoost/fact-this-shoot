@@ -1,57 +1,25 @@
-package com.teamenigma.factthisshoot;
+package classes;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListView;
+import android.database.sqlite.SQLiteDatabase;
 
-import java.lang.reflect.Array;
+import com.teamenigma.factthisshoot.R;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import classes.Category;
-import classes.CategoryLoader;
-import classes.CategoryLoaderSingleton;
-import classes.CategoryViewAdapter;
-import classes.DatabaseHelper;
-import classes.GoogleApiClientSingleton;
-import classes.Item;
-
 /**
- * Created by Cyrus on 12/10/2017.
+ * Created by user on 28 Oct 2017.
  */
 
-public class ChooseCategory extends AppCompatActivity {
+public class CategoryLoader {
 
     private DatabaseHelper dbHelper;
-    private ListView categoriesListView;
-    private CategoryViewAdapter categoriesListViewAdapter;
-    private ArrayList<Category> categoryList;
-    private CategoryLoaderSingleton loaderSingleton;
-    private CategoryLoader loader;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_category);
-        categoriesListView = (ListView) findViewById(R.id.categoryListView);
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        //setupDatabase();
-
-        CategoryLoader loader = new CategoryLoader(dbHelper);
-        loaderSingleton = CategoryLoaderSingleton.getInstance(loader);
-        this.loader = loaderSingleton.getCategoryLoader();
-        createCategoryList();
-    }
-
-    private void displayCategory(String categoryName){
-        Cursor data = dbHelper.getCategoryData(categoryName);
-        while(data.moveToNext())
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getString(3)); //Print in console for debugging
+    public CategoryLoader(DatabaseHelper dbHelper) {
+        this.dbHelper = dbHelper;
+        setupDatabase();
     }
 
     public Category getCategory(String categoryName, int imageID) {
@@ -85,21 +53,47 @@ public class ChooseCategory extends AppCompatActivity {
             }
             data.moveToFirst();
 
-
         }
 
         temp.shuffleItems();    // This randomizes the Items in the Category.
         return temp;
     }
 
-    /**
-     * This function adds makes Button(s) for all class.Category for it to be placed in the linear layout of class.ChooseCategory.
-     */
-    private void createCategoryList() {
-        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
-        categoriesListViewAdapter = new CategoryViewAdapter(this, getApplicationContext(), loader, prefs);
-        categoriesListView.setAdapter(categoriesListViewAdapter);
-        categoriesListViewAdapter.notifyDataSetChanged();
+    public Category getCategory(String categoryName) {
+        Category temp = new Category();
+        Cursor data = dbHelper.getCategoryData(categoryName); // Get all of the data within the specified category
+        /*
+        Iterate through every tuple in the data.
+        For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
+        The other three choices that are wrong will be randomly selected.
+         */
+        for(int j = 0; j < 5 ; j ++)
+        {
+            while(data.moveToNext()) {
+
+                //Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
+
+                int pictureID = data.getInt(2); //Retrieve the image ID of the answer
+                String answer = data.getString(1);//Retrieve the correct answer
+                String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
+                List<String> answers = new ArrayList<>(); // List of ALL of the answers. The purpose of this list is to avoid repetition of selecting the same answer.
+                answers.add(answer); //Add the correct answer into the list.
+
+                // Retrieve the other three random wrong answers
+                for (int i = 0 ; i < 3; i++) {
+                    String wrongAnswer = dbHelper.getWrongAnswerID(answers, categoryName);//Retrieve the wrong answer
+                    answers.add(wrongAnswer);//Add the wrong answer to the list of answers to avoid selecting it again
+                    wrongAnswers[i] = wrongAnswer;//Add the name to the list of wrong answers
+                }
+
+                temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and ad to the category.
+            }
+            data.moveToFirst();
+
+        }
+
+        temp.shuffleItems();    // This randomizes the Items in the Category.
+        return temp;
     }
 
     private void setupDatabase() {
@@ -156,4 +150,31 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Swimming", R.drawable.sports_swimming, "Sports");
         dbHelper.insertData("Tennis", R.drawable.sports_tennis, "Sports");
     }
+
+    public ArrayList<String> getStringCategories() {
+        ArrayList<String> temp = new ArrayList();
+        temp.add("dogs");
+        temp.add("planets");
+        temp.add("flowers");
+        temp.add("sports");
+        return temp;
+    }
+/*
+    public ArrayList<String> getAllCategories()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor categories = db.rawQuery(SELECT_ALL + " GROUP BY " + col_CATEGORY, null);
+
+        ArrayList<String> categoryNames = new ArrayList<>();
+
+        //Put categories into the String list
+        while(categories.moveToNext())
+        {
+            categoryNames.add(categories.getString(3));
+        }
+        close();
+        return categoryNames;
+    }*/
+
 }

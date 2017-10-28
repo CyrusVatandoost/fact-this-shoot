@@ -74,7 +74,8 @@
         </activity>
         <activity
             android:name=".Loading"
-            android:label="Loading">
+            android:label="Loading"
+            android:theme="@style/FTS_Yellow.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

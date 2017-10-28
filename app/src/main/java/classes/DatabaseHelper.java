@@ -144,26 +144,20 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
     public String getWrongAnswerID(List<String> invalidAnswers, String categoryName) {
 
         SQLiteDatabase db = getWritableDatabase();
-
         Cursor allItems = getCategoryData(categoryName);//Get all of the data within the specified category
-
         Random r = new Random();//Initialize random generator for selecting the wrong answer
-
 
         ArrayList<String>allItemNames = new ArrayList<String>(); //List of all answers
 
         //Transfer the names in the cursor queried to the list of all answers
-        while(allItems.moveToNext())
-        {
+        while(allItems.moveToNext()) {
             allItemNames.add(allItems.getString(1));
         }
 
         //Remove the invalid answers from the list of all answers
-        for(String name : invalidAnswers)
-        {
+        for(String name : invalidAnswers) {
             allItemNames.remove(name);
         }
-
 
         int randomPos = r.nextInt(allItemNames.size()); //Generate random position in the list of all answers
 

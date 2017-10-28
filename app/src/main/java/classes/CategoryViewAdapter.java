@@ -11,7 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.teamenigma.factthisshoot.Game;
+import com.teamenigma.factthisshoot.ChooseCategory;
+import com.teamenigma.factthisshoot.Loading;
 import com.teamenigma.factthisshoot.R;
 
 import java.util.ArrayList;
@@ -22,16 +23,26 @@ import java.util.ArrayList;
 
 public class CategoryViewAdapter extends BaseAdapter {
 
-    private ArrayList<Category> categories;
+    private ArrayList<String> categories;
     private Context context;
     private SharedPreferences prefs;
     private static LayoutInflater inflater = null;
+    private ArrayList<String> categoryListString;
+    private ChooseCategory chooseCategory;
 
-    public CategoryViewAdapter(Context context, ArrayList<Category> categories, SharedPreferences prefs) {
+    private CategoryLoader categoryLoader;
+
+    public CategoryViewAdapter(ChooseCategory chooseCategory, Context context, CategoryLoader categoryLoader, SharedPreferences prefs) {
         this.context = context;
-        this.categories = categories;
+        this.categoryLoader = categoryLoader;
         this.prefs = prefs;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.categoryLoader = categoryLoader;
+        if(this.categoryLoader == null)
+            Log.e("CategoryViewAdaper", "CategoryLoader is NULL");
+        else
+            this.categoryListString = categoryLoader.getStringCategories();
+        this.chooseCategory = chooseCategory;
     }
 
     /**
@@ -41,7 +52,7 @@ public class CategoryViewAdapter extends BaseAdapter {
      */
     @Override
     public int getCount() {
-        return categories.size();
+        return categoryListString.size();
     }
 
     /**
@@ -53,7 +64,8 @@ public class CategoryViewAdapter extends BaseAdapter {
      */
     @Override
     public Object getItem(int position) {
-        return categories.get(position);
+        Log.i("CategoryViewAdaper", "getItem(" + position + ").");
+        return categoryListString.get(position);
     }
 
     /**
@@ -64,6 +76,7 @@ public class CategoryViewAdapter extends BaseAdapter {
      */
     @Override
     public long getItemId(int position) {
+        Log.i("CategoryViewAdaper", "getItemId(" + position + ").");
         return position;
     }
 
@@ -89,7 +102,9 @@ public class CategoryViewAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
-        ViewHolder holder=new ViewHolder();
+        final String name = categoryListString.get(position);
+
+        ViewHolder holder = new ViewHolder();
         View rowView;
         rowView = inflater.inflate(R.layout.layout_category_button, null);
 
@@ -97,10 +112,10 @@ public class CategoryViewAdapter extends BaseAdapter {
         holder.categoryName = (TextView) rowView.findViewById(R.id.categoryName);
         holder.highScore = (TextView) rowView.findViewById(R.id.highScore);
 
-        holder.categoryImage.setImageResource(categories.get(position).getImageID());
-        holder.categoryName.setText(categories.get(position).getName());
+        //holder.categoryImage.setImageResource(categoryLoader.get);
+        holder.categoryName.setText(name);
 
-        String temp = "hs_" + categories.get(position).getName().toLowerCase();
+        String temp = "hs_" + name;
 
         //INSERT CATEGORY HIGH SCORE HERE
         holder.highScore.setText(prefs.getInt(temp, 0) + "");
@@ -108,12 +123,14 @@ public class CategoryViewAdapter extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+/*                Intent intent = new Intent(context, Loading.class);
+                intent.putExtra("categoryName", name);
+                context.startActivity(intent);
+                chooseCategory.finish();*/
 
-                Intent i = new Intent(context.getApplicationContext(), Game.class);
-                i.putExtra("category", categories.get(position));
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
+                Intent intent = new Intent(context, Loading.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("categoryName", name);
+                context.startActivity(intent);
             }
         });
 
