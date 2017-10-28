@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MobileAds.initialize(this, "ca-app-pub-1026861718675475/3907447580");   // ad-id
+/*        MobileAds.initialize(this, "ca-app-pub-1026861718675475/3907447580");   // ad-id
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest.Builder adRequest = new AdRequest.Builder();
         if (BuildConfig.DEBUG) {
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 // to the app after tapping on an ad.
                 Log.i("Ads", "onAdClosed");
             }
-        });
+        });*/
 
         findViewById(R.id.imageStart).setOnClickListener(new View.OnClickListener() {
             @Override
