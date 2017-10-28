@@ -52,24 +52,32 @@ public class ChooseCategory extends AppCompatActivity {
         For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
         The other three choices that are wrong will be randomly selected.
          */
-        while(data.moveToNext()) {
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
+        for(int j = 0; j < 5 ; j ++)
+        {
+            while(data.moveToNext()) {
 
-            int pictureID = data.getInt(2); //Retrieve the image ID of the answer
-            String answer = data.getString(1);//Retrieve the correct answer
-            String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
-            List<String> answers = new ArrayList<>(); // List of ALL of the answers. The purpose of this list is to avoid repetition of selecting the same answer.
-            answers.add(answer); //Add the correct answer into the list.
+                //Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
 
-            // Retrieve the other three random wrong answers
-            for (int i = 0 ; i < 3; i++) {
-                String wrongAnswer = dbHelper.getWrongAnswerID(answers, categoryName);//Retrieve the wrong answer
-                answers.add(wrongAnswer);//Add the wrong answer to the list of answers to avoid selecting it again
-                wrongAnswers[i] = wrongAnswer;//Add the name to the list of wrong answers
+                int pictureID = data.getInt(2); //Retrieve the image ID of the answer
+                String answer = data.getString(1);//Retrieve the correct answer
+                String[] wrongAnswers = new String[3];//The list of the answers that are wrong.
+                List<String> answers = new ArrayList<>(); // List of ALL of the answers. The purpose of this list is to avoid repetition of selecting the same answer.
+                answers.add(answer); //Add the correct answer into the list.
+
+                // Retrieve the other three random wrong answers
+                for (int i = 0 ; i < 3; i++) {
+                    String wrongAnswer = dbHelper.getWrongAnswerID(answers, categoryName);//Retrieve the wrong answer
+                    answers.add(wrongAnswer);//Add the wrong answer to the list of answers to avoid selecting it again
+                    wrongAnswers[i] = wrongAnswer;//Add the name to the list of wrong answers
+                }
+
+                temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and ad to the category.
             }
+            data.moveToFirst();
 
-            temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and ad to the category.
+
         }
+
         temp.shuffleItems();    // This randomizes the Items in the Category.
         return temp;
     }
@@ -83,6 +91,7 @@ public class ChooseCategory extends AppCompatActivity {
         categoryList.add(getCategory("Dogs", R.drawable.dogs_beagle));
         categoryList.add(getCategory("Planets", R.drawable.planet_earth));
         categoryList.add(getCategory("Flowers", R.drawable.flowers_sunflower));
+        categoryList.add(getCategory("Sports", R.drawable.sports_bowling));
         SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
         categoriesListViewAdapter = new CategoryViewAdapter(getApplicationContext(), categoryList, prefs);
         categoriesListView.setAdapter(categoriesListViewAdapter);
@@ -127,5 +136,20 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Orchid", R.drawable.flowers_orchid, "Flowers");
         dbHelper.insertData("Rose", R.drawable.flowers_rose, "Flowers");
         dbHelper.insertData("Sunflower", R.drawable.flowers_sunflower, "Flowers");
+
+        //Insert Sports
+        dbHelper.insertData("American Football", R.drawable.sports_americanfootball, "Sports");
+        dbHelper.insertData("Baseball", R.drawable.sports_baseball, "Sports");
+        dbHelper.insertData("Basketball", R.drawable.sports_basketball, "Sports");
+        dbHelper.insertData("Bowling", R.drawable.sports_bowling, "Sports");
+        dbHelper.insertData("Boxing", R.drawable.sports_boxing, "Sports");
+        dbHelper.insertData("Cue Sports", R.drawable.sports_cuesports, "Sports");
+        dbHelper.insertData("Cycling", R.drawable.sports_cycling, "Sports");
+        dbHelper.insertData("Darts", R.drawable.sports_darts, "Sports");
+        dbHelper.insertData("Football", R.drawable.sports_football, "Sports");
+        dbHelper.insertData("Ice Hockey", R.drawable.sports_icehockey, "Sports");
+        dbHelper.insertData("Lacrosse", R.drawable.sports_lacrosse, "Sports");
+        dbHelper.insertData("Swimming", R.drawable.sports_swimming, "Sports");
+        dbHelper.insertData("Tennis", R.drawable.sports_tennis, "Sports");
     }
 }
