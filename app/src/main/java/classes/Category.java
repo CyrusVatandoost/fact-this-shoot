@@ -3,6 +3,7 @@ package classes;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * Created by Cyrus on 15 Oct 2017.
@@ -23,6 +24,11 @@ public class Category implements Serializable {
     private ArrayList<Item> items;
     private ArrayList<Item> answeredItems;
 
+    private Random r; //Generate random position of the next item to get
+    private Item previousItem; //Keep track of the previous Item returned
+
+
+
     /**
      * This function creates a new Category class with empty variables.
      */
@@ -40,6 +46,8 @@ public class Category implements Serializable {
         answeredItems = new ArrayList<>();
         this.name = name;
         this.imageID = imageID;
+        r = new Random();
+        previousItem = null;
     }
 
     /**

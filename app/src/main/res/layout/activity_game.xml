@@ -90,7 +90,7 @@
         <ImageView
             android:id="@+id/imageQuestion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:adjustViewBounds="false"
             android:cropToPadding="false"
             android:textAlignment="center"

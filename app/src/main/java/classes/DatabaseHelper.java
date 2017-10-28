@@ -173,4 +173,21 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
         return allItemNames.get(randomPos); //Return the answer at the random position
     }
 
+    public ArrayList<String> getAllCategories()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor categories = db.rawQuery(SELECT_ALL + " GROUP BY " + col_CATEGORY, null);
+
+        ArrayList<String> categoryNames = new ArrayList<>();
+
+        //Put categories into the String list
+        while(categories.moveToNext())
+        {
+            categoryNames.add(categories.getString(3));
+        }
+        close();
+        return categoryNames;
+    }
+
 }
