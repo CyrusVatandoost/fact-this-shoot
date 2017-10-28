@@ -53,8 +53,7 @@ public class ChooseCategory extends AppCompatActivity {
         For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
         The other three choices that are wrong will be randomly selected.
          */
-        for(int j = 0; j < 5 ; j ++)
-        {
+
             while(data.moveToNext()) {
 
                 //Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
@@ -74,10 +73,6 @@ public class ChooseCategory extends AppCompatActivity {
 
                 temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and ad to the category.
             }
-            data.moveToFirst();
-
-
-        }
 
         temp.shuffleItems();    // This randomizes the Items in the Category.
         return temp;
@@ -93,6 +88,8 @@ public class ChooseCategory extends AppCompatActivity {
         categoryList.add(getCategory("Planets", R.drawable.planet_earth));
         categoryList.add(getCategory("Flowers", R.drawable.flowers_sunflower));
         categoryList.add(getCategory("Sports", R.drawable.sports_bowling));
+        categoryList.add(getCategory("Flags", R.drawable.philippines));
+
         SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
         categoriesListViewAdapter = new CategoryViewAdapter(getApplicationContext(), categoryList, prefs);
         categoriesListView.setAdapter(categoriesListViewAdapter);
@@ -115,6 +112,12 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Pug", R.drawable.dogs_pug, "Dogs");
         dbHelper.insertData("Rottweiler", R.drawable.dogs_rottweiler,  "Dogs");
         dbHelper.insertData("Siberian Husky", R.drawable.dogs_siberianhusky,  "Dogs");
+        dbHelper.insertData("Australian Shepherd", R.drawable.dogs_australianshepherd,  "Dogs");
+        dbHelper.insertData("Border Collie", R.drawable.dogs_bordercollie,  "Dogs");
+        dbHelper.insertData("Maltese", R.drawable.dogs_maltese,  "Dogs");
+        dbHelper.insertData("Shih Tzu", R.drawable.dogs_shihtzu,  "Dogs");
+        dbHelper.insertData("Vizsla", R.drawable.dogs_vizsla,  "Dogs");
+        dbHelper.insertData("Yorkshire Terrier", R.drawable.dogs_yorkshireterrier,  "Dogs");
 
         //Insert Planets
         dbHelper.insertData("Earth", R.drawable.planet_earth, "Planets");
@@ -125,6 +128,19 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Saturn", R.drawable.planet_saturn, "Planets");
         dbHelper.insertData("Uranus", R.drawable.planet_uranus, "Planets");
         dbHelper.insertData("Venus", R.drawable.planet_venus, "Planets");
+        dbHelper.insertData("51 Pegasi b", R.drawable.planet_51pegasib, "Planets");
+        dbHelper.insertData("55 Cancri", R.drawable.planet_55cancri, "Planets");
+        dbHelper.insertData("70 Virginis b", R.drawable.planet_70virginisb, "Planets");
+        dbHelper.insertData("COROT - 7b", R.drawable.planet_corot7b, "Planets");
+        dbHelper.insertData("Epsilon Eridani", R.drawable.planet_epsiloneridani, "Planets");
+        dbHelper.insertData("Gliese 581 d", R.drawable.planet_gliese581d, "Planets");
+        dbHelper.insertData("Gliese 436 b", R.drawable.planet_glise436b, "Planets");
+        dbHelper.insertData("HD 189733b", R.drawable.planet_hd189733b, "Planets");
+        dbHelper.insertData("HD 209458b", R.drawable.planet_hd209458b, "Planets");
+        dbHelper.insertData("Kepler 10b", R.drawable.planet_kepler10b, "Planets");
+        dbHelper.insertData("π Arae c", R.drawable.planet_piaraec, "Planets");
+        dbHelper.insertData("Ursae Majoris b", R.drawable.planet_ursaemajorisb, "Planets");
+
 
         //Insert Flowers
         dbHelper.insertData("Cannabis", R.drawable.flowers_cannabis, "Flowers");
@@ -137,6 +153,16 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Orchid", R.drawable.flowers_orchid, "Flowers");
         dbHelper.insertData("Rose", R.drawable.flowers_rose, "Flowers");
         dbHelper.insertData("Sunflower", R.drawable.flowers_sunflower, "Flowers");
+        dbHelper.insertData("Calla", R.drawable.flowers_calla, "Flowers");
+        dbHelper.insertData("Carnation", R.drawable.flowers_carnations, "Flowers");
+        dbHelper.insertData("Chamelaucium", R.drawable.flowers_chamelaucium, "Flowers");
+        dbHelper.insertData("Chrysanthemum", R.drawable.flowers_chrysanthemum, "Flowers");
+        dbHelper.insertData("Curly Willow", R.drawable.flowers_curlywillow, "Flowers");
+        dbHelper.insertData("Dahlia", R.drawable.flowers_dahlia, "Flowers");
+        dbHelper.insertData("Poinsettia", R.drawable.flowers_poinsettia, "Flowers");
+        dbHelper.insertData("Snapdragon", R.drawable.flowers_snapdragon, "Flowers");
+        dbHelper.insertData("Statice", R.drawable.flowers_statice, "Flowers");
+        dbHelper.insertData("Viburnum", R.drawable.flowers_viburnum, "Flowers");
 
         //Insert Sports
         dbHelper.insertData("American Football", R.drawable.sports_americanfootball, "Sports");
@@ -152,5 +178,37 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Lacrosse", R.drawable.sports_lacrosse, "Sports");
         dbHelper.insertData("Swimming", R.drawable.sports_swimming, "Sports");
         dbHelper.insertData("Tennis", R.drawable.sports_tennis, "Sports");
+        dbHelper.insertData("Archery", R.drawable.sports_archery, "Sports");
+        dbHelper.insertData("Golf", R.drawable.sports_golf, "Sports");
+        dbHelper.insertData("Gymnastics", R.drawable.sports_gymnastics, "Sports");
+        dbHelper.insertData("Muay Thai", R.drawable.sports_muaythai, "Sports");
+        dbHelper.insertData("Taekwondo", R.drawable.sports_taekwondo, "Sports");
+        dbHelper.insertData("Track and Field", R.drawable.sports_trackandfield, "Sports");
+        dbHelper.insertData("Wrestling", R.drawable.sports_wrestling, "Sports");
+
+        //Insert Flags
+        dbHelper.insertData("Afghanistan", R.drawable.afghanistan, "Flags");
+        dbHelper.insertData("Argentina", R.drawable.argentina, "Flags");
+        dbHelper.insertData("Australia", R.drawable.australia, "Flags");
+        dbHelper.insertData("Bangladesh", R.drawable.bangladesh, "Flags");
+        dbHelper.insertData("Belgium", R.drawable.belgium, "Flags");
+        dbHelper.insertData("Brazil", R.drawable.brazil, "Flags");
+        dbHelper.insertData("Bulgaria", R.drawable.bulgaria, "Flags");
+        dbHelper.insertData("France", R.drawable.france, "Flags");
+        dbHelper.insertData("Madagascar", R.drawable.madagascar, "Flags");
+        dbHelper.insertData("Netherlands", R.drawable.netherlands, "Flags");
+        dbHelper.insertData("New Zealand", R.drawable.newzealand, "Flags");
+        dbHelper.insertData("Nigeria", R.drawable.nigeria, "Flags");
+        dbHelper.insertData("Philippines", R.drawable.philippines, "Flags");
+        dbHelper.insertData("Singapore", R.drawable.singapore, "Flags");
+        dbHelper.insertData("South Africa", R.drawable.southafrica, "Flags");
+        dbHelper.insertData("Spain", R.drawable.spain, "Flags");
+        dbHelper.insertData("Thailand", R.drawable.thailand, "Flags");
+        dbHelper.insertData("Uganda", R.drawable.uganda, "Flags");
+        dbHelper.insertData("Vanuatu", R.drawable.vanuatu, "Flags");
+        dbHelper.insertData("Zimbabwe", R.drawable.zimbabwe, "Flags");
+
+
+
     }
 }

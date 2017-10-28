@@ -93,30 +93,7 @@ public class Category implements Serializable {
     and adds that to the answered list.
      */
     public Item getItem() {
-
-        Item temp = null;
-        int randomPos = 0;
-
-        boolean diffItem = false;
-
-        while(!diffItem)
-        {
-            randomPos = r.nextInt(items.size());
-
-            temp = items.get(randomPos);
-
-            if(previousItem != null)
-            {
-                if(!temp.getAnswer().equals(previousItem.getAnswer()))
-                    diffItem = true;
-
-            }
-            else
-                diffItem = true;
-        }
-
-        previousItem = temp;
-        items.remove(randomPos);
+        Item temp = items.remove(0);
         answeredItems.add(temp);
         return temp;
     }
