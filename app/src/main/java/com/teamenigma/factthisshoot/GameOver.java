@@ -61,21 +61,24 @@ public class GameOver extends AppCompatActivity {
         findViewById(R.id.buttonOnlineHighScores).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_dogs)), REQUEST_LEADERBOARD);
+                if(singleton.getGoogleApiClient().isConnected())
+                    startActivityForResult(Games.Leaderboards.getLeaderboardIntent(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_dogs)), REQUEST_LEADERBOARD);
             }
         });
 
-        if(category.equalsIgnoreCase("dogs")) {
-            Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_dogs), score);
-            Log.i("GoogleApiClient", "Submitting high score for dogs: " + score);
-        }
-        else if(category.equalsIgnoreCase("planets")) {
-            Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_planets), score);
-            Log.i("GoogleApiClient", "Submitting high score for planets: " + score);
-        }
-        else if(category.equalsIgnoreCase("flowers")) {
-            Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_flowers), score);
-            Log.i("GoogleApiClient", "Submitting high score for flowers: " + score);
+        if(singleton.getGoogleApiClient().isConnected()) {
+            if(category.equalsIgnoreCase("dogs")) {
+                Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_dogs), score);
+                Log.i("GoogleApiClient", "Submitting high score for dogs: " + score);
+            }
+            else if(category.equalsIgnoreCase("planets")) {
+                Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_planets), score);
+                Log.i("GoogleApiClient", "Submitting high score for planets: " + score);
+            }
+            else if(category.equalsIgnoreCase("flowers")) {
+                Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_flowers), score);
+                Log.i("GoogleApiClient", "Submitting high score for flowers: " + score);
+            }
         }
 
     }
