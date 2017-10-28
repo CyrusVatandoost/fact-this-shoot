@@ -83,6 +83,10 @@ public class GameOver extends AppCompatActivity {
                 Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_sports), score);
                 Log.i("GoogleApiClient", "Submitting high score for sports: " + score);
             }
+            else if(category.equalsIgnoreCase("flags")) {
+                Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_flags), score);
+                Log.i("GoogleApiClient", "Submitting high score for flags: " + score);
+            }
         }
 
     }

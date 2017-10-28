@@ -18,4 +18,6 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="leaderboard_top_scorers_planets" translatable="false">CgkIrrKQwpkQEAIQBA</string>
     <!-- leaderboard Top Scorers: Sports -->
     <string name="leaderboard_top_scorers_sports" translatable="false">CgkIrrKQwpkQEAIQBQ</string>
+    <!-- leaderboard Top Scorers: Flags -->
+    <string name="leaderboard_top_scorers_flags" translatable="false">CgkIrrKQwpkQEAIQBg</string>
 </resources>

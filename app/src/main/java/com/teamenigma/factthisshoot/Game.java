@@ -405,6 +405,10 @@ public class Game extends AppCompatActivity {
             if(prefs.getInt("hs_sports", 0) < score)
                 editor.putInt("hs_sports", score);
         }
+        else if(category.getName().equalsIgnoreCase("flags")) {
+            if(prefs.getInt("hs_flags", 0) < score)
+                editor.putInt("hs_flags", score);
+        }
         editor.commit();
 
         countDownTimer.cancel();

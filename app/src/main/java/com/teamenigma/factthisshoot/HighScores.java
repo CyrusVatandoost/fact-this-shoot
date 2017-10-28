@@ -40,6 +40,7 @@ public class HighScores extends AppCompatActivity {
         valueList.add("Planets: " + prefs.getInt("hs_planets", 0));
         valueList.add("Flowers: " + prefs.getInt("hs_flowers", 0));
         valueList.add("Sports: " + prefs.getInt("hs_sports", 0));
+        valueList.add("Flags: " + prefs.getInt("hs_flags", 0));
 
     }
 }
