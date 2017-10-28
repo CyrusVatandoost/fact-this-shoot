@@ -36,7 +36,6 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
         setupDatabase();
         createCategoryList();
-
     }
 
     private void displayCategory(String categoryName){

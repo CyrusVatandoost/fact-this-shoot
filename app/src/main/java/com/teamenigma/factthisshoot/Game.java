@@ -37,7 +37,7 @@ public class Game extends AppCompatActivity {
     private ImageView imageQuestion, imageHeart1, imageHeart2, imageHeart3, imageCheck, imageCross;
     private Button buttonA, buttonB, buttonC, buttonD;
     private ImageButton imageButtonMute;
-    private TextView textViewScore, textViewTimer, textAddedScore;
+    private TextView textViewScore, textAddedScore;
     private ProgressBar progressBarHorizontal;
 
     private Category category;
@@ -69,7 +69,6 @@ public class Game extends AppCompatActivity {
         imageCheck = (ImageView)findViewById(R.id.imageCheck);
         imageCross = (ImageView)findViewById(R.id.imageCross);
         textViewScore = (TextView)findViewById(R.id.textViewScore);
-        textViewTimer = (TextView)findViewById(R.id.textViewTimer);
         textAddedScore = (TextView)findViewById(R.id.textAddedScore);
         progressBarHorizontal = (ProgressBar)findViewById(R.id.progressBarHorizonal);
         progressBarHorizontal.setMax(5);
@@ -160,7 +159,6 @@ public class Game extends AppCompatActivity {
 
         countDownTimer = new CountDownTimer(5000, 10) {
             public void onTick(long millisUntilFinished) {
-                textViewTimer.setText((millisUntilFinished / 1000 + 1) + "");
                 progressBarHorizontal.setProgress( (int) millisUntilFinished / 1000);
                 timer = (int) millisUntilFinished / 1000;
             }
@@ -256,7 +254,6 @@ public class Game extends AppCompatActivity {
             buttonD.setEnabled(true);
 
             textViewScore.setText(score + "");
-            textViewTimer.setText(timer + "");
             progressBarHorizontal.setProgress(timer);
 
             countDownTimer.start();
