@@ -164,6 +164,7 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Statice", R.drawable.flowers_statice, "Flowers");
         dbHelper.insertData("Viburnum", R.drawable.flowers_viburnum, "Flowers");
 
+
         //Insert Sports
         dbHelper.insertData("American Football", R.drawable.sports_americanfootball, "Sports");
         dbHelper.insertData("Baseball", R.drawable.sports_baseball, "Sports");
