@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // auto sign in
             mGoogleApiClient.connect();
             GoogleApiClientSingleton.getInstance(mGoogleApiClient); // attaching the GoogleApiClient to the Singleton class
+            Log.i("GoogleApiClient", "GoogleApiClient attached to Singleton.");
         }
     }
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnectionFailed(ConnectionResult connectionResult) {
         if (mResolvingConnectionFailure) {
             // Already resolving
+            Log.e("GoogleApiClient", "Connection failure.");
             return;
         }
 

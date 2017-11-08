@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.games.Games;
@@ -66,27 +67,37 @@ public class GameOver extends AppCompatActivity {
             }
         });
 
+        // Sign in button
+        Button signInButton = new Button(this);
+        signInButton.findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // start the asynchronous sign in flow
+                singleton.getGoogleApiClient().connect();
+            }
+        });
+
         if(singleton.getGoogleApiClient().isConnected()) {
-            if(category.equalsIgnoreCase("dogs")) {
+            if (category.equalsIgnoreCase("dogs")) {
                 Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_dogs), score);
                 Log.i("GoogleApiClient", "Submitting high score for dogs: " + score);
-            }
-            else if(category.equalsIgnoreCase("planets")) {
+            } else if (category.equalsIgnoreCase("planets")) {
                 Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_planets), score);
                 Log.i("GoogleApiClient", "Submitting high score for planets: " + score);
-            }
-            else if(category.equalsIgnoreCase("flowers")) {
+            } else if (category.equalsIgnoreCase("flowers")) {
                 Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_flowers), score);
                 Log.i("GoogleApiClient", "Submitting high score for flowers: " + score);
-            }
-            else if(category.equalsIgnoreCase("sports")) {
+            } else if (category.equalsIgnoreCase("sports")) {
                 Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_sports), score);
                 Log.i("GoogleApiClient", "Submitting high score for sports: " + score);
-            }
-            else if(category.equalsIgnoreCase("flags")) {
+            } else if (category.equalsIgnoreCase("flags")) {
                 Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_flags), score);
                 Log.i("GoogleApiClient", "Submitting high score for flags: " + score);
             }
+            signInButton.setVisibility(View.GONE);
+        }
+        else {
+            signInButton.setVisibility(View.VISIBLE);
         }
 
     }
