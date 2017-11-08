@@ -20,7 +20,7 @@ public class GoogleApiClientSingleton {
             instance = new GoogleApiClientSingleton();
             if (mGoogleApiClient == null) {
                 mGoogleApiClient = aGoogleApiClient;
-                Log.i("MyActivity", "GoogleApiClient created successfuly.");
+                Log.i("GoogleApiClient", "GoogleApiClient created successfully.");
             }
         }
         return instance;
@@ -28,7 +28,7 @@ public class GoogleApiClientSingleton {
 
     public GoogleApiClient getGoogleApiClient(){
         if(mGoogleApiClient == null)
-            Log.e("MyActivity", "GoogleApiClient is NULL.");
+            Log.e("GoogleApiClient", "GoogleApiClient is NULL.");
         return mGoogleApiClient;
     }
 
