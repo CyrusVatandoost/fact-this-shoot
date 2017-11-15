@@ -3,6 +3,7 @@ package com.teamenigma.factthisshoot;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ public class Loading extends AppCompatActivity {
 
         Intent intent = getIntent();
         String categoryName = intent.getStringExtra("categoryName");
+        Log.i("Loading", "Received Category from ChooseCategory: " + categoryName + ".");
 
         TextView num = (TextView)findViewById(R.id.textNum);
         num.setText(categoryName);
@@ -46,6 +48,7 @@ public class Loading extends AppCompatActivity {
         Intent intent = new Intent(this, Loading.class);
         intent.putExtra("category", category);
         startActivity(intent);
+        Log.i("Loading", "Started Game with Category: " + category + ".");
     }
 
 }

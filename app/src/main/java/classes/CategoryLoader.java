@@ -3,6 +3,7 @@ package classes;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.teamenigma.factthisshoot.R;
 
@@ -34,7 +35,7 @@ public class CategoryLoader {
         {
             while(data.moveToNext()) {
 
-                //Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
+                Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
 
                 int pictureID = data.getInt(2); //Retrieve the image ID of the answer
                 String answer = data.getString(1);//Retrieve the correct answer

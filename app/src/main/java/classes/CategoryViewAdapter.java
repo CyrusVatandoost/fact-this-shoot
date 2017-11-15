@@ -131,6 +131,7 @@ public class CategoryViewAdapter extends BaseAdapter {
                 Intent intent = new Intent(context, Loading.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("categoryName", name);
                 context.startActivity(intent);
+                Log.i("CategoryViewAdapter", "Started Loading Activity with Category: " + name);
             }
         });
 
