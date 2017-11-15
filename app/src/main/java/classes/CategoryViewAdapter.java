@@ -92,6 +92,8 @@ public class CategoryViewAdapter extends BaseAdapter {
         View rowView;
         rowView = inflater.inflate(R.layout.layout_category_button, null);
 
+        final String categoryName = categories.get(position).getName();
+
         holder.categoryImage = (ImageView) rowView.findViewById(R.id.categoryImage);
         holder.categoryName = (TextView) rowView.findViewById(R.id.categoryName);
         holder.highScore = (TextView) rowView.findViewById(R.id.highScore);
@@ -103,15 +105,18 @@ public class CategoryViewAdapter extends BaseAdapter {
         //INSERT CATEGORY HIGH SCORE HERE
         holder.highScore.setText(prefs.getInt(temp, 0) + "");
 
+        final CategoryLoaderSingleton categoryLoaderSingleton = new CategoryLoaderSingleton();
+        categoryLoaderSingleton.getInstance(null);
+
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             // TODO Auto-generated method stub
             Intent i = new Intent(context.getApplicationContext(), Game.class);
-            i.putExtra("category", categories.get(position));
+            i.putExtra("category", categoryLoaderSingleton.getCategoryLoader().getCategory(categoryName));
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
-            Log.i("CategoryViewAdapter", "Started Game with Category: " + categories.get(position).getName());
+            Log.i("CategoryViewAdapter", "Started Game with Category: " + categoryName);
             }
         });
 

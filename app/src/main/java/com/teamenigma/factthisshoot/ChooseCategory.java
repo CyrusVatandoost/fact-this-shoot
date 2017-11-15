@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Category;
+import classes.CategoryLoader;
+import classes.CategoryLoaderSingleton;
 import classes.CategoryViewAdapter;
 import classes.DatabaseHelper;
 import classes.GoogleApiClientSingleton;
@@ -23,10 +25,12 @@ import classes.Item;
 
 public class ChooseCategory extends AppCompatActivity {
 
-    DatabaseHelper dbHelper;
-    ListView categoriesListView;
-    CategoryViewAdapter categoriesListViewAdapter;
-    ArrayList<Category> categoryList;
+    private DatabaseHelper dbHelper;
+    private ListView categoriesListView;
+    private CategoryViewAdapter categoriesListViewAdapter;
+    private ArrayList<Category> categoryList;
+
+    private CategoryLoaderSingleton categoryLoaderSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +38,9 @@ public class ChooseCategory extends AppCompatActivity {
         setContentView(R.layout.activity_choose_category);
         categoriesListView = (ListView) findViewById(R.id.categoryListView);
         dbHelper = new DatabaseHelper(this);
-        setupDatabase();
+        //setupDatabase();
+        categoryLoaderSingleton.getInstance(new CategoryLoader(dbHelper));
         createCategoryList();
-    }
-
-    private void displayCategory(String categoryName){
-        Cursor data = dbHelper.getCategoryData(categoryName);
-        while(data.moveToNext())
-            Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getString(3)); //Print in console for debugging
     }
 
     public Category getCategory(String categoryName, int imageID) {
