@@ -85,18 +85,16 @@ public class CategoryViewAdapter extends BaseAdapter {
      * @param parent      The parent that this view will eventually be attached to
      * @return A View corresponding to the data at the specified position.
      */
-
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
-        ViewHolder holder=new ViewHolder();
+        ViewHolder holder = new ViewHolder();
         View rowView;
         rowView = inflater.inflate(R.layout.layout_category_button, null);
 
         holder.categoryImage = (ImageView) rowView.findViewById(R.id.categoryImage);
         holder.categoryName = (TextView) rowView.findViewById(R.id.categoryName);
         holder.highScore = (TextView) rowView.findViewById(R.id.highScore);
-
         holder.categoryImage.setImageResource(categories.get(position).getImageID());
         holder.categoryName.setText(categories.get(position).getName());
 
@@ -108,12 +106,12 @@ public class CategoryViewAdapter extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-
-                Intent i = new Intent(context.getApplicationContext(), Game.class);
-                i.putExtra("category", categories.get(position));
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
+            // TODO Auto-generated method stub
+            Intent i = new Intent(context.getApplicationContext(), Game.class);
+            i.putExtra("category", categories.get(position));
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+            Log.i("CategoryViewAdapter", "Started Game with Category: " + categories.get(position).getName());
             }
         });
 

@@ -177,6 +177,9 @@ public class Game extends AppCompatActivity {
         // This function is empty to disable the back button.
     }
 
+    /**
+     * This function mutes the audio of the app, not change the volume of the phone.
+     */
     public void mute() {
         if(volume == 0) {
             AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
