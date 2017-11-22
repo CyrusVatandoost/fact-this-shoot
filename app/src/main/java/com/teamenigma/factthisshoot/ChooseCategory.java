@@ -33,8 +33,16 @@ public class ChooseCategory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_category);
         categoriesListView = (ListView) findViewById(R.id.categoryListView);
+
         dbHelper = new DatabaseHelper(this);
-        setupDatabase();
+
+        //dbHelper.deleteDatabase(this);
+
+        if(!dbHelper.doesDatabaseExist(this)) {
+            dbHelper.createDatabase();
+            setupDatabase();
+        }
+
         createCategoryList();
     }
 

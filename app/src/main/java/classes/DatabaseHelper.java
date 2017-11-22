@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +49,15 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
      */
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        onCreate(this.getWritableDatabase());
+    }
 
+    public void createDatabase() {
+        onCreate(this.getWritableDatabase());
+    }
+
+    public void deleteDatabase(Context context) {
+        context.deleteDatabase(DATABASE_NAME);
+        Log.i("Database", "Deleted database.");
     }
 
     /**
@@ -60,6 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.i("Database", "Creating new database.");
         db.execSQL(DELETE_TABLE);
         db.execSQL(CREATE_TABLE);
     }
@@ -109,7 +118,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
         if(result == -1) return false;//If result is -1, database insert is unsuccessful
         else {
             Log.d("SQL STATEMENT", "Insertion successful");
-
             return true; //Else, the database insert is successful
         }
 
@@ -139,50 +147,40 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
     public String getWrongAnswerID(List<String> invalidAnswers, String categoryName) {
 
         SQLiteDatabase db = getWritableDatabase();
-
         Cursor allItems = getCategoryData(categoryName);//Get all of the data within the specified category
-
         Random r = new Random();//Initialize random generator for selecting the wrong answer
-
-
         ArrayList<String>allItemNames = new ArrayList<String>(); //List of all answers
 
         //Transfer the names in the cursor queried to the list of all answers
-        while(allItems.moveToNext())
-        {
+        while(allItems.moveToNext()) {
             allItemNames.add(allItems.getString(1));
         }
 
         //Remove the invalid answers from the list of all answers
-        for(String name : invalidAnswers)
-        {
+        for(String name : invalidAnswers) {
             allItemNames.remove(name);
         }
-
-
         int randomPos = r.nextInt(allItemNames.size()); //Generate random position in the list of all answers
-
-
         close();
-
         return allItemNames.get(randomPos); //Return the answer at the random position
     }
 
-    public ArrayList<String> getAllCategories()
-    {
+    public ArrayList<String> getAllCategories() {
         SQLiteDatabase db = getWritableDatabase();
-
         Cursor categories = db.rawQuery(SELECT_ALL + " GROUP BY " + col_CATEGORY, null);
-
         ArrayList<String> categoryNames = new ArrayList<>();
-
         //Put categories into the String list
-        while(categories.moveToNext())
-        {
+        while(categories.moveToNext()) {
             categoryNames.add(categories.getString(3));
         }
         close();
         return categoryNames;
+    }
+
+    public boolean doesDatabaseExist(Context context) {
+        File dbFile = context.getDatabasePath(DATABASE_NAME);
+        Log.i("Database", dbFile.exists() + "");
+        return dbFile.exists();
     }
 
 }
