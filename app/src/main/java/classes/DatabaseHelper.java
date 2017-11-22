@@ -49,7 +49,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
         onCreate(this.getWritableDatabase());
-
     }
 
     /**

@@ -29,7 +29,6 @@ public class ChooseCategory extends AppCompatActivity {
     private ListView categoriesListView;
     private CategoryViewAdapter categoriesListViewAdapter;
     private ArrayList<Category> categoryList;
-
     private CategoryLoaderSingleton categoryLoaderSingleton;
 
     @Override
@@ -139,7 +138,6 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("π Arae c", R.drawable.planet_piaraec, "Planets");
         dbHelper.insertData("Ursae Majoris b", R.drawable.planet_ursaemajorisb, "Planets");
 
-
         //Insert Flowers
         dbHelper.insertData("Cannabis", R.drawable.flowers_cannabis, "Flowers");
         dbHelper.insertData("Daffodil", R.drawable.flowers_daffodil, "Flowers");
@@ -161,7 +159,6 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Snapdragon", R.drawable.flowers_snapdragon, "Flowers");
         dbHelper.insertData("Statice", R.drawable.flowers_statice, "Flowers");
         dbHelper.insertData("Viburnum", R.drawable.flowers_viburnum, "Flowers");
-
 
         //Insert Sports
         dbHelper.insertData("American Football", R.drawable.sports_americanfootball, "Sports");
@@ -206,8 +203,5 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Uganda", R.drawable.uganda, "Flags");
         dbHelper.insertData("Vanuatu", R.drawable.vanuatu, "Flags");
         dbHelper.insertData("Zimbabwe", R.drawable.zimbabwe, "Flags");
-
-
-
     }
 }
