@@ -20,9 +20,11 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application>
         <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
+
     </application>
 
 </manifest>

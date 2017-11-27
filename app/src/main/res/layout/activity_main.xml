@@ -28,8 +28,8 @@
 
     <ImageView
         android:id="@+id/imageStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="180dp"
+        android:layout_height="188dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -38,8 +38,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.38"
-        app:srcCompat="@drawable/button_start" />
+        app:layout_constraintVertical_bias="0.297"
+        app:srcCompat="@drawable/button_start"
+        tools:layout_editor_absoluteX="89dp" />
 
     <!-- sign-in button -->
 
@@ -93,5 +94,20 @@
         app:layout_constraintLeft_toRightOf="@+id/buttonOnlineHighScores"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_stars_black_24dp" />
+
+    <Button
+        android:id="@+id/buttonPlayOnline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Play online"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageStart"
+        app:layout_constraintVertical_bias="0.387" />
 
 </android.support.constraint.ConstraintLayout>
