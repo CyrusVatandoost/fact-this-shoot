@@ -106,6 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
     @param category The category the picture is in
      */
     public boolean insertData(String name, int image, String category) throws SQLiteException {
+        Log.d("DatabaseHelper", "insertData(" + name + ", " + image + "," + category);
         SQLiteDatabase db = getWritableDatabase(); //Get database to write data on
         ContentValues cv = new ContentValues(); //Initialize container cv where data values wil be put in
         cv.put(col_NAME, name);//Put name in the cv
@@ -128,11 +129,11 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
     @param category The category of the data (planets, flowers, dogs)
      */
     public Cursor getCategoryData(String category) {
+        Log.d("DatabaseHelper", "getCategoryData(" + category + ")");
         SQLiteDatabase db = getWritableDatabase();
         //Retrieve all data in a category (dogs, plants etc.)
         Cursor categoryData = db.rawQuery(SELECT_ALL + " WHERE " + col_CATEGORY + " = '"+category+"'", null);
         return categoryData;
-
     }
 
     /**
@@ -145,7 +146,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
 
      */
     public String getWrongAnswerID(List<String> invalidAnswers, String categoryName) {
-
+        Log.d("DatabaseHelper", "getWrongAnswerID: " + categoryName);
         SQLiteDatabase db = getWritableDatabase();
         Cursor allItems = getCategoryData(categoryName);//Get all of the data within the specified category
         Random r = new Random();//Initialize random generator for selecting the wrong answer
@@ -179,7 +180,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements Serializable{
 
     public boolean doesDatabaseExist(Context context) {
         File dbFile = context.getDatabasePath(DATABASE_NAME);
-        Log.i("Database", dbFile.exists() + "");
+        Log.d("Database", dbFile.exists() + "");
         return dbFile.exists();
     }
 

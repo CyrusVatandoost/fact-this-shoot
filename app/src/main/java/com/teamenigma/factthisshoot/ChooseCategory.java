@@ -53,14 +53,15 @@ public class ChooseCategory extends AppCompatActivity {
     }
 
     public Category getCategory(String categoryName, int imageID) {
+        Log.i("ChooseCategory", "getCategory(" + categoryName + ")");
         Category temp = new Category(categoryName, imageID);
         Cursor data = dbHelper.getCategoryData(categoryName); // Get all of the data within the specified category
+
         /*
         Iterate through every tuple in the data.
         For every tuple (ID | Name | Image | Category), a question/item will be made where the tuple's Name is the correct answer.
         The other three choices that are wrong will be randomly selected.
          */
-
             while(data.moveToNext()) {
 
                 //Log.d("ITEM", data.getInt(0) + " " + data.getString(1) + " " + data.getInt(2) + " " + data.getString(3));//Print in console for debugging
@@ -89,6 +90,7 @@ public class ChooseCategory extends AppCompatActivity {
      * This function adds makes Button(s) for all class.Category for it to be placed in the linear layout of class.ChooseCategory.
      */
     private void createCategoryList() {
+        Log.d("ChooseCategory", "createCategoryList()");
         categoryList = new ArrayList<>();
         // Add the categories here.
         categoryList.add(getCategory("Dogs", R.drawable.dogs_beagle));
@@ -104,6 +106,7 @@ public class ChooseCategory extends AppCompatActivity {
     }
 
     private void setupDatabase() {
+        Log.d("ChooseCategory", "setupDatabase(): Setting up database");
         //Insert Dogs
         dbHelper.insertData("Beagle", R.drawable.dogs_beagle,  "Dogs");
         dbHelper.insertData("Bulldog", R.drawable.dogs_bulldog,  "Dogs");
@@ -215,8 +218,5 @@ public class ChooseCategory extends AppCompatActivity {
         dbHelper.insertData("Uganda", R.drawable.uganda, "Flags");
         dbHelper.insertData("Vanuatu", R.drawable.vanuatu, "Flags");
         dbHelper.insertData("Zimbabwe", R.drawable.zimbabwe, "Flags");
-
-
-
     }
 }
