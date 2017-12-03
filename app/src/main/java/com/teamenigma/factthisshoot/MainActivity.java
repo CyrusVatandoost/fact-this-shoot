@@ -135,6 +135,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+        // "Multiplayer Player" button to start Game
+        findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Multiplayer.class);
+                startActivity(i);
+            }
+        });
+
         findViewById(R.id.buttonLocalHighScores).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
