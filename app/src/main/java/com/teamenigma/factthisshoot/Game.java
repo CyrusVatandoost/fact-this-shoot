@@ -89,15 +89,15 @@ public class Game extends AppCompatActivity {
         buttonA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(item.answer(buttonA.getText().toString())) {
-                    buttonA.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
-                    correct();
-                }
-                else {
-                    buttonA.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
-                    buttonA.setEnabled(false);
-                    incorrect();
-                }
+            if(item.answer(buttonA.getText().toString())) {
+                buttonA.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+                correct();
+            }
+            else {
+                buttonA.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                buttonA.setEnabled(false);
+                incorrect();
+            }
             }
         });
 

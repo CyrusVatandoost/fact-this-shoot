@@ -126,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });*/
 
-        findViewById(R.id.imageStart).setOnClickListener(new View.OnClickListener() {
+        // "Single Player" button to start Game
+        findViewById(R.id.btnSinglePlayer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ChooseCategory.class);
