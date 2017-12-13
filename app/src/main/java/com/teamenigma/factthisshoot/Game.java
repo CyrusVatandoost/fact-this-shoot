@@ -19,12 +19,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.games.Games;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
-import classes.GoogleApiClientSingleton;
 import classes.Item;
 import classes.Category;
 
@@ -32,7 +29,7 @@ import classes.Category;
  * Created by Cyrus on 12/10/2017.
  */
 
-public class Game extends AppCompatActivity {
+public class Game extends classes.Game {
 
     private ImageView imageQuestion, imageHeart1, imageHeart2, imageHeart3, imageCheck, imageCross;
     private Button buttonA, buttonB, buttonC, buttonD;
@@ -89,15 +86,15 @@ public class Game extends AppCompatActivity {
         buttonA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(item.answer(buttonA.getText().toString())) {
-                    buttonA.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
-                    correct();
-                }
-                else {
-                    buttonA.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
-                    buttonA.setEnabled(false);
-                    incorrect();
-                }
+            if(item.answer(buttonA.getText().toString())) {
+                buttonA.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+                correct();
+            }
+            else {
+                buttonA.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                buttonA.setEnabled(false);
+                incorrect();
+            }
             }
         });
 

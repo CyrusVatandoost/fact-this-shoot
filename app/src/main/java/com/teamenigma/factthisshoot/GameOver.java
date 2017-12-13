@@ -68,8 +68,7 @@ public class GameOver extends AppCompatActivity {
         });
 
         // Sign in button
-        Button signInButton = new Button(this);
-        signInButton.findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // start the asynchronous sign in flow
@@ -94,10 +93,10 @@ public class GameOver extends AppCompatActivity {
                 Games.Leaderboards.submitScore(singleton.getGoogleApiClient(), getBaseContext().getString(R.string.leaderboard_top_scorers_flags), score);
                 Log.i("GoogleApiClient", "Submitting high score for flags: " + score);
             }
-            signInButton.setVisibility(View.GONE);
+            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
         }
         else {
-            signInButton.setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
         }
 
     }

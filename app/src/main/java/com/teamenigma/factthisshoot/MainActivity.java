@@ -126,8 +126,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });*/
 
-
-
+        // "Single Player" button to start Game
         findViewById(R.id.imageStart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+
+        // "Multiplayer Player" button to start Game
         findViewById(R.id.btn_SearchOpponent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
