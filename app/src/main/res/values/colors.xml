@@ -14,4 +14,7 @@
     <color name="red">                  #FF6060</color>
     <color name="pressed">              #515151</color>
     <color name="yellow">               #ffeb3b</color>
+    <color name="lightGray">#D3D3D3</color>
+    <color name="my_chat_background">#33F0FF</color>
+    <color name="other_chat_background">#33FF99</color>
 </resources>

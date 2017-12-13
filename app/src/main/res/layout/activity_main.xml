@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.teamenigma.factthisshoot.MainActivity">
 
+    <Button
+        android:id="@+id/btn_SearchOpponent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Play Online"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintTop_toBottomOf="@+id/imageStart"
+        app:layout_constraintVertical_bias="0.484"
+        tools:layout_editor_absoluteX="137dp" />
+
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
@@ -28,8 +40,8 @@
 
     <ImageView
         android:id="@+id/imageStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="194dp"
+        android:layout_height="178dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -38,7 +50,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.38"
+        app:layout_constraintVertical_bias="0.345"
         app:srcCompat="@drawable/button_start" />
 
     <!-- sign-in button -->

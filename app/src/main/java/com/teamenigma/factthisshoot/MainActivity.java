@@ -126,10 +126,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });*/
 
+
+
         findViewById(R.id.imageStart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ChooseCategory.class);
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.btn_SearchOpponent).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SearchOpponent.class);
                 startActivity(i);
             }
         });
