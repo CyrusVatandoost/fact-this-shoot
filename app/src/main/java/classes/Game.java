@@ -17,7 +17,8 @@ public class Game extends AppCompatActivity {
     protected Bitmap bitmapQuestion;
     protected ArrayList<String> optionList;
     // score for player
-    protected int score = 0;
+    protected int ownScore = 0;
+
     // timer for each question
     protected CountDownTimer countDownTimer;
     /*
@@ -26,4 +27,53 @@ public class Game extends AppCompatActivity {
      */
     protected int timer = 5;
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Item getItem() {
+        if(category.canGet())
+        {
+            item = category.getItem();
+            return (item);
+        }
+
+        return null;
+    }
+
+    public ArrayList<String> getOptionList() {
+        return optionList;
+    }
+
+    public void setOptionList(ArrayList<String> optionList) {
+        this.optionList = optionList;
+    }
+
+    public int getOwnScore() {
+        return ownScore;
+    }
+
+    public void addOwnScore(int ownScore) {
+        this.ownScore += ownScore;
+    }
+
+    public CountDownTimer getCountDownTimer() {
+        return countDownTimer;
+    }
+
+    public void setCountDownTimer(CountDownTimer countDownTimer) {
+        this.countDownTimer = countDownTimer;
+    }
+
+    public int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
 }

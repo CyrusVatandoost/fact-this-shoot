@@ -20,8 +20,14 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -38,11 +44,23 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import classes.Item;
+import classes.Multiplayer;
+
+import com.teamenigma.factthisshoot.Game;
+import com.teamenigma.factthisshoot.GameOver;
 import com.teamenigma.factthisshoot.R;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import classes.logger.Log;
 
@@ -53,33 +71,25 @@ public class BluetoothChatFragment extends Fragment {
 
     private static final String TAG = "BluetoothChatFragment";
 
+    private ImageView imageQuestion, imageHeart1, imageHeart2, imageHeart3, imageCheck, imageCross;
+    private Button buttonA, buttonB, buttonC, buttonD;
+    private ImageButton imageButtonMute;
+    private TextView textViewOwnScore, textAddedOwnScore, textViewOpponentScore, textAddedOpponentScore;
+    private ProgressBar progressBarHorizontal;
+
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
     private static final int REQUEST_ENABLE_BT = 3;
 
     // Layout Views
-    private ListView mConversationView;
-    private EditText mOutEditText;
     private Button mConnectSecure;
-    private Button mConnectInsecure;
     private Button mMakeDiscoverable;
 
     /**
      * Name of the connected device
      */
     private String mConnectedDeviceName = null;
-    private String mOwnDeviceName = null;
-
-    /**
-     * Array adapter for the conversation thread
-     */
-    private ArrayAdapter<String> mConversationArrayAdapter;
-
-    /**
-     * String buffer for outgoing messages
-     */
-    private StringBuffer mOutStringBuffer;
 
     /**
      * Local Bluetooth adapter
@@ -95,7 +105,9 @@ public class BluetoothChatFragment extends Fragment {
      *
      * Game object that handles the game.
      */
-    //private Game mGame = new Game();
+    private Multiplayer mGame = new Multiplayer();
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,11 +173,154 @@ public class BluetoothChatFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mConversationView = (ListView) view.findViewById(R.id.in);
        mConnectSecure = (Button) view.findViewById(R.id.btn_connSecure);
-       mConnectInsecure= (Button) view.findViewById(R.id.btn_connInsecure);
        mMakeDiscoverable = (Button) view.findViewById(R.id.btn_makeDiscoverable);
-        //mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
+
+
+        // Declare the views.
+        imageQuestion = (ImageView) view.findViewById(R.id.imageQuestion) ;
+        imageCheck = (ImageView)view.findViewById(R.id.imageCheck2);
+        imageCross = (ImageView)view.findViewById(R.id.imageCross2);
+        textViewOwnScore = (TextView) view.findViewById(R.id.txtScorePlayer);
+        textAddedOwnScore = (TextView) view.findViewById(R.id.txtScoreChangePlayer);
+        textViewOpponentScore = (TextView) view.findViewById(R.id.txtScoreOpoonent);
+        textAddedOpponentScore = (TextView) view.findViewById(R.id.txtScoreChangeOpponent);
+        progressBarHorizontal = (ProgressBar) view.findViewById(R.id.progressBarTimer);
+        progressBarHorizontal.setMax(5);
+
+        // Hide the Check and Cross graphics.
+        imageCheck.setVisibility(View.INVISIBLE);
+        imageCross.setVisibility(View.INVISIBLE);
+
+        buttonA = (Button) view.findViewById(R.id.btnA);
+        buttonB = (Button) view.findViewById(R.id.btnB);
+        buttonC = (Button) view.findViewById(R.id.btnC);
+        buttonD = (Button) view.findViewById(R.id.btnD);
+
+        hideGameViews();
+
+    }
+
+    private void hideGameViews()
+    {
+        imageQuestion.setVisibility(View.INVISIBLE);
+        textViewOwnScore.setVisibility(View.INVISIBLE);
+        textViewOpponentScore.setVisibility(View.INVISIBLE);
+        textAddedOwnScore.setVisibility(View.INVISIBLE);
+        textAddedOpponentScore.setVisibility(View.INVISIBLE);
+        progressBarHorizontal.setVisibility(View.INVISIBLE);
+
+        buttonA.setVisibility(View.INVISIBLE);
+        buttonB.setVisibility(View.INVISIBLE);
+        buttonC.setVisibility(View.INVISIBLE);
+        buttonD.setVisibility(View.INVISIBLE);
+
+
+        // Hide the Check and Cross graphics.
+        imageCheck.setVisibility(View.INVISIBLE);
+        imageCross.setVisibility(View.INVISIBLE);
+    }
+
+    private void showGameViews()
+    {
+        mGame.addOpponentScore(1000);
+        mGame.addOwnScore(1000);
+
+        imageQuestion.setVisibility(View.VISIBLE);
+        textViewOwnScore.setVisibility(View.VISIBLE);
+        textViewOpponentScore.setVisibility(View.VISIBLE);
+        progressBarHorizontal.setVisibility(View.VISIBLE);
+
+        buttonA.setVisibility(View.VISIBLE);
+        buttonB.setVisibility(View.VISIBLE);
+        buttonC.setVisibility(View.VISIBLE);
+        buttonD.setVisibility(View.VISIBLE);
+
+        textViewOwnScore.setText(mGame.getOwnScore()+"");
+        textViewOpponentScore.setText(mGame.getOpponentScore()+"");
+        setupButtons();
+        setQuestion();
+    }
+
+    private void setupButtons()
+    {
+        buttonA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage("addOwnScore:");
+                /*
+                if(item.answer(buttonA.getText().toString())) {
+                    buttonA.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+                    correct();
+
+                else {              }
+                    buttonA.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    buttonA.setEnabled(false);
+                    incorrect();
+                }
+                */
+            }
+        });
+
+        buttonB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if(item.answer(buttonB.getText().toString())) {
+//                    buttonB.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+//                    correct();
+//                }
+//                else {
+//                    buttonB.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+//                    buttonB.setEnabled(false);
+//                    incorrect();
+//                }
+
+            }
+        });
+
+        buttonC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if(item.answer(buttonC.getText().toString())) {
+//                    buttonC.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+//                    correct();
+//                }
+//                else {
+//                    buttonC.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+//                    buttonC.setEnabled(false);
+//                    incorrect();
+//                }
+            }
+        });
+
+        buttonD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if(item.answer(buttonD.getText().toString())) {
+//                    buttonD.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+//                    correct();
+//                }
+//                else {
+//                    buttonD.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+//                    buttonD.setEnabled(false);
+//                    incorrect();
+//                }
+            }
+        });
+
+        mGame.setCountDownTimer(
+
+                new CountDownTimer(5000, 10) {
+                    public void onTick(long millisUntilFinished) {
+                        progressBarHorizontal.setProgress( (int) millisUntilFinished / 1000);
+                        mGame.setTimer((int) millisUntilFinished / 1000);
+                    }
+                    public void onFinish()
+                    {
+                        //incorrect();
+                    }
+                }
+        );
     }
 
     /**
@@ -173,11 +328,6 @@ public class BluetoothChatFragment extends Fragment {
      */
     private void setupChat() {
         Log.d(TAG, "setupChat()");
-
-        // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message);
-
-        mConversationView.setAdapter(mConversationArrayAdapter);
 
         // Initialize the compose field with a listener for the return key
         //mOutEditText.setOnEditorActionListener(mWriteListener);
@@ -194,17 +344,6 @@ public class BluetoothChatFragment extends Fragment {
             }
         });
 
-        mConnectInsecure.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                View view = getView();
-                if (null != view) {
-                    // Launch the DeviceListActivity to see devices and do scan
-                    Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
-                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
-                }
-            }
-        });
 
         mMakeDiscoverable.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -220,8 +359,6 @@ public class BluetoothChatFragment extends Fragment {
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothConnectionService(getActivity(), mHandler);
 
-        // Initialize the buffer for outgoing messages
-        mOutStringBuffer = new StringBuffer("");
     }
 
     /**
@@ -254,26 +391,10 @@ public class BluetoothChatFragment extends Fragment {
             byte[] send = message.getBytes();
             mChatService.write(send, Constants.MESSAGE_WRITE);
 
-            // Reset out string buffer to zero and clear the edit text field
-            mOutStringBuffer.setLength(0);
             //mOutEditText.setText(mOutStringBuffer);
         }
     }
 
-    /**
-     * The action listener for the EditText widget, to listen for the return key
-     */
-    private TextView.OnEditorActionListener mWriteListener
-            = new TextView.OnEditorActionListener() {
-        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            // If the action is a key-up event on the return key, send the message
-            if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                String message = view.getText().toString();
-                sendMessage(message);
-            }
-            return true;
-        }
-    };
 
     /**
      * Updates the status on the action bar.
@@ -321,7 +442,6 @@ public class BluetoothChatFragment extends Fragment {
                     switch (msg.arg1) {
                         case BluetoothConnectionService.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            mConversationArrayAdapter.clear();
                             //String connectDeviceNamePacket = "ownDevice:"+mConnectedDeviceName;
                             //mChatService.write(connectDeviceNamePacket.getBytes(), Constants.MESSAGE_WRITE);
                             break;
@@ -338,146 +458,63 @@ public class BluetoothChatFragment extends Fragment {
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
+                    Toast.makeText(getContext(), writeMessage, Toast.LENGTH_LONG).show();
                     String messagePacketWrite[] = writeMessage.split(":");
                     String messageHeaderWrite = messagePacketWrite[0];
-                    String messageContentWrite = messagePacketWrite[1];
+                    //String messageContentWrite = messagePacketWrite[1];
 
                     switch(messageHeaderWrite)
                     {
 
                         case "startGame":
                             //mGame = new Game();
-                            mConversationArrayAdapter.add(messageHeaderWrite + ": Game has started.");
+                            showGameViews();
                             break;
 
-                        case "opponentChoice":
-                            //mConversationArrayAdapter.add(mGame.getRound() + " - " + "Me: " + messageContentWrite);
+                        case "addOwnScore":
+                            addOwnScore(100);
+                            addOpponentScore(-100);
                             break;
 
-                        case "roundWinner":
-                            String winnerContentPacket[] = messageContentWrite.split("%");
-                            int determinant = Integer.parseInt(winnerContentPacket[0]);
-                            String message = winnerContentPacket[1];
-
-                            switch(determinant)
-                            {
-                                case 1://You won
-                                    //mConversationArrayAdapter.add(mGame.getRound() + " - Winner:" + message);
-                                   // mGame.ownEarnPoint();
-                                    break;
-                                case 0:
-                                    //mConversationArrayAdapter.add(mGame.getRound() + " - " + "Tie! No one wins the round!");
-                                    break;
-                                case 2://Opponent won
-                                    //mConversationArrayAdapter.add(mGame.getRound() + " - Winner:" + message);
-                                    //mGame.opponentEarnPoint();
-                                    break;
-                            }
-                            //mGame.clearAnswers();
-                            //mGame.goToNextRound();
-                            break;
-
-
-                        case "startRound":
-                            //Start a round
-                            String roundContentPacket[] = messageContentWrite.split("-");
-                            String currentRound = roundContentPacket[0];
-                            String opponentScore = roundContentPacket[1];
-                            Log.d(TAG, "Round number: " + currentRound);
-                            Log.d(TAG, "Opponent score: " + opponentScore);
-                           // mConversationArrayAdapter.add("You have " + mGame.getOwnScore() + " points.");
-                            //mConversationArrayAdapter.add("Opponent has " + mGame.getOpponentScore() + " points.");
-                            mConversationArrayAdapter.add("Round " + currentRound + " start!");
-                           // mGame.clearAnswers();
-                            //enableButtons();
+                        case "addOpponentScore":
                             break;
 
 
                         default:
                             break;
                     }
+
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     //String readMessage = new String(readBuf, 0, msg.arg1);
                     String readMessage = new String(readBuf);
+                    Toast.makeText(getContext(), readMessage, Toast.LENGTH_LONG).show();
 
                     String messagePacket[] = readMessage.split(":");
                     String messageHeader = messagePacket[0];
-                    String messageContent = messagePacket[1];
+                    //String messageContent = messagePacket[1];
 
                     switch(messageHeader)
                     {
                         case "startGame":
-                            //mGame = new Game();
-                            mConversationArrayAdapter.add(messageHeader + ": Game has started.");
-                            startRound();
+                            showGameViews();
                             break;
 
-                        case "startRound":
-                            //Start a round
-                            String roundContentPacket[] = messageContent.split("-");
-                            String currentRound = roundContentPacket[0];
-                            String opponentScore = roundContentPacket[1];
-                            //Log.d(TAG, "Round number: " + currentRound);
-                            //Log.d(TAG, "Opponent score: " + opponentScore);
-//                            mConversationArrayAdapter.add("You have " + mGame.getOwnScore() + " points.");
-//                            mConversationArrayAdapter.add("Opponent has " + mGame.getOpponentScore() + " points.");
-//                            mConversationArrayAdapter.add("Round " + currentRound + " start!");
-//                            mGame.clearAnswers();
-                            //enableButtons();
-                            break;
-                        case "opponentChoice":
-                            String opponentChoice = messageContent;
-                            //mGame.setOpponentAnswer(opponentChoice);
-
-
-                            //Display opponent's choice
-
-//                            if(!mGame.isOwnAnswerSet()) //If you haven't set your answer yet
-//                            {
-//                                mConversationArrayAdapter.add(mGame.getRound() + " - " + mConnectedDeviceName + ": " + "Answer set.");
-//                                mConversationArrayAdapter.add(mGame.getRound() + " - Waiting for your answer.");
-//
-//                            }
-//                            else
-//                            {
-//                                mConversationArrayAdapter.add(mGame.getRound() + " - " + mConnectedDeviceName + ": " + mGame.getOpponentAnswer());
-//                                getWinner();
-//                            }
-                            break;
-                        case "roundWinner":
-                            String winnerContentPacket[] = messageContent.split("%");
-                            int determinant = Integer.parseInt(winnerContentPacket[0]);
-                            String message = winnerContentPacket[1];
-
-//                            switch(determinant)
-//                            {
-//                                case 1://To the opponent, you won. You're the opponent of the opponent.
-//                                    mConversationArrayAdapter.add(mGame.getRound() + " - Winner:" + message);
-//                                    mGame.opponentEarnPoint(); //You earn the point from the opponent's POV.
-//                                    break;
-//                                case 0:
-//                                    mConversationArrayAdapter.add(mGame.getRound() + " - " + "Tie! No one wins the round!");
-//                                    break;
-//                                case 2://To the opponent, you lost.
-//                                    mConversationArrayAdapter.add(mGame.getRound() + " - Winner:" + message);
-//                                    mGame.ownEarnPoint();//Opponent earns point from opponent's POV
-//                                    break;
-//                            }
-                            nextRound();
+                        case "addOwnScore":
+                            addOwnScore(-100);
+                            addOpponentScore(100);
                             break;
 
-                        case "ownDevice":
-                            mOwnDeviceName = messageContent.trim();
+                        case "addOpponentScore":
                             break;
+
                         default:
                             break;
 
                     }
 
-                    //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -571,94 +608,160 @@ public class BluetoothChatFragment extends Fragment {
         return false;
     }
 
-    public void nextRound()
-    {
-        //mGame.clearAnswers();
-        //mGame.goToNextRound();
+    /**
+     * This function adds points to the score.
+     * It also displays how many points got added/subtracted for a second.
+     * @param num
+     */
+    public void addOwnScore(int num) {
+        mGame.addOwnScore(num);
+        textAddedOwnScore.setVisibility(View.VISIBLE);
 
-        startRound();
+        if(num > 0)
+            textAddedOwnScore.setText("+" + num);
+        else if(num == 0)
+            textAddedOwnScore.setText("0");
+        else if(num < 0)
+            textAddedOwnScore.setText("-"+num);
+
+        new CountDownTimer(1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+
+            }
+            public void onFinish() {
+                textAddedOwnScore.setVisibility(View.INVISIBLE);
+            }
+        }.start();
+
+        textViewOwnScore.setText(mGame.getOwnScore()+"");
     }
 
-    public void startRound()
-    {
-//        int round = mGame.getRound();
-//        int ownScore = mGame.getOwnScore();
-//
-//        String roundMessage = "startRound:"+round+"-"+ownScore;
-//        Log.d(TAG, "Round Message: " + roundMessage);
-//        sendMessage(roundMessage);
+    /**
+     * This function adds points to the score.
+     * It also displays how many points got added/subtracted for a second.
+     * @param num
+     */
+    public void addOpponentScore(int num) {
+        mGame.addOpponentScore(num);
+        textAddedOpponentScore.setVisibility(View.VISIBLE);
+
+        if(num > 0)
+            textAddedOpponentScore.setText("+" + num);
+        else if(num == 0)
+            textAddedOpponentScore.setText("0");
+        else if(num < 0)
+            textAddedOpponentScore.setText("-"+num);
+
+        new CountDownTimer(1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+
+            }
+            public void onFinish() {
+                textAddedOpponentScore.setVisibility(View.INVISIBLE);
+            }
+        }.start();
+
+        textViewOpponentScore.setText(mGame.getOpponentScore()+"");
+    }
+
+    /**
+     * This function sets the variables for the new question.
+     */
+    private void setQuestion() {
+
+        // If the Category still has Items, get one Item else end Game.
+        if(mGame.getCategory().canGet()) {
+            Item item = mGame.getItem();
+
+            Bitmap questionBitmap = BitmapFactory.decodeResource(getResources(), item.getQuestion());
+
+            // clear existing list, add options, and shuffle
+            ArrayList<String> optionList = new ArrayList<>();
+            optionList.add(item.getOption1());
+            optionList.add(item.getOption2());
+            optionList.add(item.getOption3());
+            optionList.add(item.getAnswer());
+            Collections.shuffle(optionList);
+
+            buttonA.setBackgroundResource(android.R.drawable.btn_default);
+            buttonB.setBackgroundResource(android.R.drawable.btn_default);
+            buttonC.setBackgroundResource(android.R.drawable.btn_default);
+            buttonD.setBackgroundResource(android.R.drawable.btn_default);
+
+            // Clear the colors that were applied to the buttons.
+            buttonA.getBackground().clearColorFilter();
+            buttonB.getBackground().clearColorFilter();
+            buttonC.getBackground().clearColorFilter();
+            buttonD.getBackground().clearColorFilter();
+
+            imageQuestion.setImageBitmap(questionBitmap);
+            buttonA.setText(optionList.get(0));
+            buttonB.setText(optionList.get(1));
+            buttonC.setText(optionList.get(2));
+            buttonD.setText(optionList.get(3));
+
+            // Re-enables all buttons that were disabled when they were incorrectly clicked on.
+            buttonA.setEnabled(true);
+            buttonB.setEnabled(true);
+            buttonC.setEnabled(true);
+            buttonD.setEnabled(true);
+
+            progressBarHorizontal.setProgress(mGame.getTimer());
+
+            mGame.getCountDownTimer().start();
+        }
+        // If there are no more items left.
+        else {
+            mGame.getCountDownTimer().cancel();
+            endGame();
+        }
 
     }
 
-    /*
-    public void enableButtons()
-    {
-        mPaperButton.setClickable(true);
-        mRockButton.setClickable(true);
-        mScissorsButton.setClickable(true);
+    /**
+     * This function gets called when the game ends.
+     * It brings the user to the GameOver Activity.
+     */
+    private void endGame() {
+        //SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        //SharedPreferences.Editor editor = prefs.edit();
+
+        /*
+        if(mGame.getCategory().getName().equalsIgnoreCase("dogs")) {
+            if(prefs.getInt("hs_dogs", 0) < score) {
+                editor.putInt("hs_dogs", score);
+            }
+        }
+        else if(mGame.getCategory().getName().equalsIgnoreCase("planets")) {
+            if(prefs.getInt("hs_planets", 0) < score)
+                editor.putInt("hs_planets", score);
+        }
+        else if(mGame.getCategory().getName().equalsIgnoreCase("flowers")) {
+            if(prefs.getInt("hs_flowers", 0) < score)
+                editor.putInt("hs_flowers", score);
+        }
+        else if(mGame.getCategory().getName().equalsIgnoreCase("sports")) {
+            if(prefs.getInt("hs_sports", 0) < score)
+                editor.putInt("hs_sports", score);
+        }
+        else if(mGame.getCategory().getName().equalsIgnoreCase("flags")) {
+            if(prefs.getInt("hs_flags", 0) < score)
+                editor.putInt("hs_flags", score);
+        }
+        editor.commit();
+        */
+
+        mGame.getCountDownTimer().cancel();
+        Intent intent = new Intent(this.getContext(), GameOver.class);
+        intent.putExtra("score", mGame.getOwnScore());
+        intent.putExtra("category", mGame.getCategory().getName());
+        this.getActivity().finish();
+        startActivity(intent);
     }
 
-    public void disableButtons()
-    {
-        mPaperButton.setClickable(false);
-        mRockButton.setClickable(false);
-        mScissorsButton.setClickable(false);
-    }
-    */
 
-    public void answer(String message)
-    {
-        //disableButtons();
-        String messagePacket[] = message.split(":");
-        String ownAnswer = messagePacket[1];
 
-//        mGame.setOwnAnswer(ownAnswer);
-//
-//        sendMessage(message);
-//
-//        if(!mGame.isOpponentAnswerSet()) //If opponent has not set his answer yet
-//        {
-//            mConversationArrayAdapter.add(mGame.getRound() + " - Waiting for opponent.");
-//        }
-//        else
-//        {
-//            mConversationArrayAdapter.add(mGame.getRound() + " - " + mConnectedDeviceName + ": " + mGame.getOpponentAnswer());
-//            //getWinner();
-//        }
-    }
 
-    public void getWinner()
-    {
-//        if(mGame.isOwnAnswerSet() && mGame.isOpponentAnswerSet())
-//        {
-//            Log.d(TAG, "Own answer: " + mGame.getOwnAnswer());
-//            Log.d(TAG, "Opponent answer: " + mGame.getOpponentAnswer());
-//            int winner = mGame.ownWinRound(mGame.getOwnAnswer().trim(), mGame.getOpponentAnswer().trim());
-//            Log.d(TAG, "Determinant: " + winner);
-//            Log.d(TAG, "OWN DEVICE: " + mOwnDeviceName);
-//            switch(winner)
-//            {
-//                case 1://You win.
-//                    String iWin = "roundWinner:1%" + mBluetoothAdapter.getName();
-//                    sendMessage(iWin);
-//                    break;
-//                case 0://Tie
-//                    String noWin = "roundWinner:0%Tie! No winner this round.";
-//                    sendMessage(noWin);
-//                    break;
-//                case -1://You lose. Opponent wins.
-//                    String opponentWin = "roundWinner:2%" + mConnectedDeviceName;
-//                    sendMessage(opponentWin);
-//                    break;
-//                default:
-//                    Log.e(TAG, "ERROR WITH GETTING THE WINNER");
-//                    break;
-//            }
-//        }
-//        else
-//        {
-//            Log.e(TAG, "ERROR WITH GETTING THE WINNER. Own answer or opponent answer not set yet");
-//        }
-    }
+
 
 }

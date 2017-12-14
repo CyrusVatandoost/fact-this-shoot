@@ -37,9 +37,9 @@ public class Game extends classes.Game {
     private TextView textViewScore, textAddedScore;
     private ProgressBar progressBarHorizontal;
 
-    private Category category;
+    protected Category category;
     private Item item;
-    private Bitmap questionBitmap;
+    protected Bitmap questionBitmap;
     private ArrayList<String> optionList;
 
     private int score = 0;
@@ -78,7 +78,7 @@ public class Game extends classes.Game {
         category = (Category)intent.getSerializableExtra("category");
         loadSounds();
 
-        getSupportActionBar().setTitle(category.getName());  // provide compatibility to all the versions
+        //getSupportActionBar().setTitle(category.getName());  // provide compatibility to all the versions
 
         imageQuestion.setImageBitmap(questionBitmap);
 

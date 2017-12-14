@@ -69,6 +69,7 @@ public class SearchOpponent extends SampleActivityBase {
     }
 
 
+    /*
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem logToggle = menu.findItem(R.id.menu_toggle_log);
@@ -100,7 +101,7 @@ public class SearchOpponent extends SampleActivityBase {
 
 
 
-    /** Create a chain of targets that will receive log data */
+
 
     @Override
     public void initializeLogging() {
@@ -120,6 +121,7 @@ public class SearchOpponent extends SampleActivityBase {
 
         Log.i(TAG, "Ready");
     }
+    */
 
 
 }
