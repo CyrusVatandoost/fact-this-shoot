@@ -106,7 +106,8 @@ public class BluetoothChatFragment extends Fragment {
      * Game object that handles the game.
      */
     private Multiplayer mGame = new Multiplayer();
-
+    private Item item;
+    private CountDownTimer countDownTimer = mGame.getCountDownTimer();
 
 
     @Override
@@ -248,32 +249,32 @@ public class BluetoothChatFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 sendMessage("addOwnScore:");
-                /*
+
                 if(item.answer(buttonA.getText().toString())) {
                     buttonA.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
                     correct();
-
-                else {              }
+                }
+                else {
                     buttonA.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
                     buttonA.setEnabled(false);
                     incorrect();
                 }
-                */
+
             }
         });
 
         buttonB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(item.answer(buttonB.getText().toString())) {
-//                    buttonB.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
-//                    correct();
-//                }
-//                else {
-//                    buttonB.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
-//                    buttonB.setEnabled(false);
-//                    incorrect();
-//                }
+                if(item.answer(buttonB.getText().toString())) {
+                    buttonB.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+                    correct();
+                }
+                else {
+                    buttonB.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    buttonB.setEnabled(false);
+                    incorrect();
+                }
 
             }
         });
@@ -281,36 +282,34 @@ public class BluetoothChatFragment extends Fragment {
         buttonC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(item.answer(buttonC.getText().toString())) {
-//                    buttonC.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
-//                    correct();
-//                }
-//                else {
-//                    buttonC.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
-//                    buttonC.setEnabled(false);
-//                    incorrect();
-//                }
+                if(item.answer(buttonC.getText().toString())) {
+                    buttonC.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+                    correct();
+                }
+                else {
+                    buttonC.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    buttonC.setEnabled(false);
+                    incorrect();
+                }
             }
         });
 
         buttonD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(item.answer(buttonD.getText().toString())) {
-//                    buttonD.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
-//                    correct();
-//                }
-//                else {
-//                    buttonD.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
-//                    buttonD.setEnabled(false);
-//                    incorrect();
-//                }
+                if(item.answer(buttonD.getText().toString())) {
+                    buttonD.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+                    correct();
+                }
+                else {
+                    buttonD.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    buttonD.setEnabled(false);
+                    incorrect();
+                }
             }
         });
 
-        mGame.setCountDownTimer(
-
-                new CountDownTimer(5000, 10) {
+        countDownTimer = new CountDownTimer(5000, 10) {
                     public void onTick(long millisUntilFinished) {
                         progressBarHorizontal.setProgress( (int) millisUntilFinished / 1000);
                         mGame.setTimer((int) millisUntilFinished / 1000);
@@ -319,8 +318,8 @@ public class BluetoothChatFragment extends Fragment {
                     {
                         //incorrect();
                     }
-                }
-        );
+        };
+
     }
 
     /**
@@ -468,7 +467,7 @@ public class BluetoothChatFragment extends Fragment {
 
                         case "startGame":
                             //mGame = new Game();
-                            showGameViews();
+                            //showGameViews();
                             break;
 
                         case "addOwnScore":
@@ -477,6 +476,8 @@ public class BluetoothChatFragment extends Fragment {
                             break;
 
                         case "addOpponentScore":
+                            addOwnScore(-100);
+                            addOpponentScore(100);
                             break;
 
 
@@ -508,6 +509,8 @@ public class BluetoothChatFragment extends Fragment {
                             break;
 
                         case "addOpponentScore":
+                            addOwnScore(100);
+                            addOpponentScore(-100);
                             break;
 
                         default:
@@ -671,7 +674,7 @@ public class BluetoothChatFragment extends Fragment {
 
         // If the Category still has Items, get one Item else end Game.
         if(mGame.getCategory().canGet()) {
-            Item item = mGame.getItem();
+            item = mGame.getItem();
 
             Bitmap questionBitmap = BitmapFactory.decodeResource(getResources(), item.getQuestion());
 
@@ -708,11 +711,11 @@ public class BluetoothChatFragment extends Fragment {
 
             progressBarHorizontal.setProgress(mGame.getTimer());
 
-            mGame.getCountDownTimer().start();
+            countDownTimer.start();
         }
         // If there are no more items left.
         else {
-            mGame.getCountDownTimer().cancel();
+            countDownTimer.cancel();
             endGame();
         }
 
@@ -751,12 +754,76 @@ public class BluetoothChatFragment extends Fragment {
         editor.commit();
         */
 
-        mGame.getCountDownTimer().cancel();
+        countDownTimer.cancel();
         Intent intent = new Intent(this.getContext(), GameOver.class);
         intent.putExtra("score", mGame.getOwnScore());
         intent.putExtra("category", mGame.getCategory().getName());
         this.getActivity().finish();
         startActivity(intent);
+    }
+
+    /**
+     * This function gets called every time the user clicks on a correct answer.
+     */
+    private void correct() {
+        countDownTimer.cancel();
+
+        sendMessage("addOwnScore:");
+        mGame.setTimer(5);
+
+        /*
+        if (soundLoaded)
+            soundPool.play(soundCorrect, volume, volume, 1, 0, 1f);
+        */
+
+        // Display the check mark for 250 milliseconds.
+        imageCheck.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                imageCheck.setVisibility(View.INVISIBLE);
+            }
+        }, 250);
+
+        setQuestion();
+    }
+
+    /**
+     * This function gets called every time the user clicks on an incorrect answer.
+     */
+    private void incorrect() {
+        countDownTimer.cancel();
+
+        //sendMessage("addOpponentScore:");
+        //health--;
+        //updateHealth();
+        mGame.setTimer(5);
+
+        /*
+        if (soundLoaded)
+            soundPool.play(soundIncorrect, volume, volume, 1, 0, 1f);
+        */
+
+        // Display the cross mark for 250 milliseconds.
+        imageCross.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                imageCross.setVisibility(View.INVISIBLE);
+            }
+        }, 250);
+
+        if(checkGame(mGame.getOwnScore()))
+            setQuestion();
+        else
+            endGame();
+
+    }
+
+    private boolean checkGame(int score) {
+        if(score > 0)
+            return true;
+        return false;
     }
 
 
