@@ -35,18 +35,7 @@
         android:layout_width="304dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-    <ImageView
-        android:id="@+id/imageStart"
-        android:layout_width="194dp"
-        android:layout_height="178dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.345"
-        app:srcCompat="@drawable/button_start" />
+
 
 
         <ImageButton
@@ -123,7 +112,7 @@
         android:layout_marginTop="8dp">
 
         <Button
-            android:id="@+id/btnSinglePlayer"
+            android:id="@+id/imageStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Single Player"
