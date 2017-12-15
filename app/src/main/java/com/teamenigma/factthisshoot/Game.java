@@ -295,7 +295,7 @@ public class Game extends classes.Game {
 
         addScore(-100);
         health--;
-        updateHealth();
+        //updateHealth();
         timer = 5;
 
         if (soundLoaded)

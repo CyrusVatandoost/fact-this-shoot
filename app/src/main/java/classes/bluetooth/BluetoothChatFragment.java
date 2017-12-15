@@ -711,7 +711,7 @@ public class BluetoothChatFragment extends Fragment {
 
             progressBarHorizontal.setProgress(mGame.getTimer());
 
-            countDownTimer.start();
+            //countDownTimer.start();
         }
         // If there are no more items left.
         else {

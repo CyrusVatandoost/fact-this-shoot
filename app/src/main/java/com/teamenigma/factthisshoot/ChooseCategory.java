@@ -79,6 +79,7 @@ public class ChooseCategory extends AppCompatActivity {
                     wrongAnswers[i] = wrongAnswer;//Add the name to the list of wrong answers
                 }
 
+                Log.i("CATEGORY ITEM", "temp.add(new Item('"+pictureID+"', '"+answer+"', '"+wrongAnswers[0]+"', '" +wrongAnswers[1]+"', '" +wrongAnswers[2]+"'));");
                 temp.add(new Item(pictureID, answer, wrongAnswers[0], wrongAnswers[1], wrongAnswers[2])); //Create new Item and ad to the category.
             }
 
